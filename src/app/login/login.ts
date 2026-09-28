@@ -1,16 +1,18 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { PocketBaseService } from '../services/pocketbase.service';
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login {
   protected readonly pbService = inject(PocketBaseService);
+  private readonly router = inject(Router);
 
   // UI state
   isSignUp = signal(false);
@@ -23,6 +25,15 @@ export class Login {
   password = '';
   passwordConfirm = '';
   name = '';
+
+  constructor() {
+    // If user is already authenticated, redirect to /home immediately
+    effect(() => {
+      if (this.pbService.isLoggedIn()) {
+        this.router.navigate(['/home']);
+      }
+    });
+  }
 
   toggleMode(): void {
     this.isSignUp.update((val) => !val);
@@ -74,6 +85,7 @@ export class Login {
         await this.pbService.loginWithEmail(this.email, this.password);
       }
       this.resetForm();
+      await this.router.navigate(['/home']);
     } catch (err: any) {
       this.errorMessage.set(this.formatErrorMessage(err));
     } finally {
@@ -89,6 +101,7 @@ export class Login {
     try {
       await this.pbService.loginWithGoogle();
       this.resetForm();
+      await this.router.navigate(['/home']);
     } catch (err: any) {
       this.errorMessage.set(this.formatErrorMessage(err));
     } finally {

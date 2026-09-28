@@ -1,5 +1,21 @@
 import { computed, Injectable, signal } from '@angular/core';
-import PocketBase, { RecordAuthResponse, RecordModel } from 'pocketbase';
+import PocketBase, { RecordAuthResponse, RecordListOptions, RecordModel } from 'pocketbase';
+
+export interface VideoRecord extends RecordModel {
+  title: string;
+  description?: string;
+  category?: string;
+  videoFile?: string;
+  thumbnail?: string;
+  creator?: string;
+  views?: number;
+  duration?: string;
+  expand?: {
+    creator?: RecordModel;
+    user?: RecordModel;
+    [key: string]: any;
+  };
+}
 
 @Injectable({
   providedIn: 'root',
@@ -70,6 +86,32 @@ export class PocketBaseService {
   logout(): void {
     this.pb.authStore.clear();
     this.currentUser.set(null);
+  }
+
+  /**
+   * Fetch list of videos from the PocketBase 'videos' collection.
+   */
+  async getVideos(options?: RecordListOptions): Promise<VideoRecord[]> {
+    const response = await this.pb.collection('videos').getList<VideoRecord>(1, 50, {
+      sort: '-created',
+      expand: 'creator,user',
+      ...options,
+    });
+    return response.items;
+  }
+
+  /**
+   * Create a new video entry (supports FormData for video & thumbnail files).
+   */
+  async createVideo(data: FormData | Record<string, any>): Promise<VideoRecord> {
+    return await this.pb.collection('videos').create<VideoRecord>(data);
+  }
+
+  /**
+   * Delete a video by its ID.
+   */
+  async deleteVideo(id: string): Promise<boolean> {
+    return await this.pb.collection('videos').delete(id);
   }
 
   /**

@@ -1,0 +1,435 @@
+<div class="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+  <!-- Top Navigation Bar -->
+  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 sm:px-6 py-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      <!-- Logo & Brand -->
+      <a routerLink="/home" class="flex items-center gap-2.5 shrink-0 group cursor-pointer">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-rose-500/20 group-hover:scale-105 transition">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <span class="text-xl font-bold tracking-tight text-white hidden sm:inline">Video<span class="text-indigo-400">Share</span></span>
+      </a>
+
+      <!-- Search Bar -->
+      <div class="flex-1 max-w-xl mx-2 sm:mx-6">
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          <input
+            type="text"
+            [ngModel]="searchQuery()"
+            (ngModelChange)="searchQuery.set($event)"
+            placeholder="Search videos, creators, topics..."
+            class="w-full pl-10 pr-9 py-2 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" />
+          @if (searchQuery()) {
+            <button
+              (click)="searchQuery.set('')"
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-300">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Actions & Profile -->
+      <div class="flex items-center gap-3 shrink-0">
+        <!-- Upload Button -->
+        <button
+          (click)="openUploadModal()"
+          class="flex items-center gap-2 py-2 px-3.5 rounded-xl bg-gradient-to-r from-rose-500 to-indigo-600 hover:from-rose-600 hover:to-indigo-700 text-white text-sm font-medium shadow-md shadow-rose-500/20 transition cursor-pointer">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+          <span class="hidden md:inline">Upload Video</span>
+        </button>
+
+        <!-- User Chip & Sign Out -->
+        <div class="flex items-center gap-2 bg-slate-800/80 border border-slate-700/60 rounded-xl px-2.5 py-1.5">
+          <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-indigo-500 to-rose-500 flex items-center justify-center text-white text-xs font-bold shrink-0">
+            {{ (pbService.currentUser()?.['name'] || pbService.currentUser()?.['email'])?.charAt(0)?.toUpperCase() || 'U' }}
+          </div>
+          <span class="text-xs font-medium text-slate-200 hidden lg:inline max-w-[120px] truncate">
+            {{ pbService.currentUser()?.['name'] || pbService.currentUser()?.['email'] }}
+          </span>
+
+          <button
+            (click)="handleLogout()"
+            title="Sign Out"
+            class="text-slate-400 hover:text-rose-400 transition p-1 rounded-md cursor-pointer ml-1">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Categories Filter Bar -->
+  <div class="bg-slate-950/80 border-b border-slate-900 px-4 sm:px-6 py-2.5 overflow-x-auto scrollbar-none">
+    <div class="max-w-7xl mx-auto flex items-center gap-2">
+      @for (cat of categories; track cat) {
+        <button
+          type="button"
+          (click)="setCategory(cat)"
+          [class.bg-indigo-600]="selectedCategory() === cat"
+          [class.text-white]="selectedCategory() === cat"
+          [class.bg-slate-900]="selectedCategory() !== cat"
+          [class.text-slate-300]="selectedCategory() !== cat"
+          [class.border-indigo-500]="selectedCategory() === cat"
+          [class.border-slate-800]="selectedCategory() !== cat"
+          class="px-3.5 py-1.5 rounded-lg text-xs font-medium border hover:border-slate-700 transition cursor-pointer whitespace-nowrap">
+          {{ cat }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Main Feed Area -->
+  <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-6">
+    <!-- Notice if displaying sample videos because PB collection has 0 records -->
+    @if (!isLoading() && videos().length === 0) {
+      <div class="mb-6 p-4 rounded-2xl bg-indigo-950/40 border border-indigo-800/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-start gap-3">
+          <div class="w-9 h-9 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0 mt-0.5">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-sm font-semibold text-white">No PocketBase videos uploaded yet</h3>
+            <p class="text-xs text-slate-400 mt-0.5">
+              Showing preview demo videos below. Upload your first real video anytime using the button!
+            </p>
+          </div>
+        </div>
+        <button
+          (click)="openUploadModal()"
+          class="shrink-0 py-2 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium transition cursor-pointer self-start sm:self-auto">
+          Upload Video Now
+        </button>
+      </div>
+    }
+
+    <!-- Loading State -->
+    @if (isLoading()) {
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        @for (i of [1,2,3,4,5,6,7,8]; track i) {
+          <div class="animate-pulse space-y-3">
+            <div class="aspect-video bg-slate-800/60 rounded-xl"></div>
+            <div class="flex gap-3">
+              <div class="w-9 h-9 rounded-full bg-slate-800/60 shrink-0"></div>
+              <div class="flex-1 space-y-2 py-1">
+                <div class="h-3.5 bg-slate-800/60 rounded w-5/6"></div>
+                <div class="h-2.5 bg-slate-800/60 rounded w-1/2"></div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else if (filteredVideos().length === 0) {
+      <!-- Empty Filter/Search State -->
+      <div class="py-20 text-center">
+        <div class="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center mx-auto mb-4 text-slate-500">
+          <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-white">No videos found</h3>
+        <p class="text-sm text-slate-400 mt-1 max-w-sm mx-auto">
+          No matches found for "{{ searchQuery() }}" in category "{{ selectedCategory() }}".
+        </p>
+        <button
+          (click)="searchQuery.set(''); setCategory('All')"
+          class="mt-4 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm font-medium text-white transition cursor-pointer">
+          Reset Filters
+        </button>
+      </div>
+    } @else {
+      <!-- Video Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        @for (video of filteredVideos(); track video.id) {
+          <div
+            (click)="openPlayer(video)"
+            class="group cursor-pointer flex flex-col bg-slate-900/60 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-xl hover:shadow-indigo-500/5 transition duration-200">
+            <!-- Thumbnail & Duration -->
+            <div class="aspect-video relative bg-slate-800 overflow-hidden">
+              @if (video.thumbnailUrl) {
+                <img
+                  [src]="video.thumbnailUrl"
+                  [alt]="video.title"
+                  class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+              } @else {
+                <!-- Default aesthetic thumbnail placeholder -->
+                <div class="w-full h-full bg-gradient-to-br from-slate-800 via-slate-900 to-indigo-950 flex flex-col items-center justify-center p-4 text-center">
+                  <div class="w-12 h-12 rounded-2xl bg-indigo-600/30 text-indigo-400 flex items-center justify-center mb-2">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                  <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">{{ video.category }}</span>
+                </div>
+              }
+
+              <!-- Duration badge -->
+              <span class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/80 text-[11px] font-mono text-white backdrop-blur-xs">
+                {{ video.duration || 'Video' }}
+              </span>
+
+              <!-- Hover Play Overlay -->
+              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                <div class="w-12 h-12 rounded-full bg-white/90 text-slate-950 flex items-center justify-center shadow-lg group-hover:scale-110 transition">
+                  <svg class="w-6 h-6 fill-current ml-0.5" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card Metadata -->
+            <div class="p-4 flex gap-3">
+              <!-- Creator Avatar -->
+              <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-rose-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-sm">
+                {{ video.creatorName.charAt(0).toUpperCase() }}
+              </div>
+
+              <!-- Title, Creator, Meta -->
+              <div class="flex-1 min-w-0">
+                <h4 class="text-sm font-semibold text-white line-clamp-2 leading-snug group-hover:text-indigo-400 transition">
+                  {{ video.title }}
+                </h4>
+                <p class="text-xs text-slate-400 mt-1 truncate">
+                  {{ video.creatorName }}
+                </p>
+                <div class="flex items-center gap-1.5 text-xs text-slate-500 mt-0.5">
+                  <span>{{ video.views | number }} views</span>
+                  <span>•</span>
+                  <span>{{ video.timeAgo }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </main>
+
+  <!-- Video Player Modal -->
+  @if (activeVideo()) {
+    <div
+      class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6"
+      (click)="closePlayer()">
+      <div
+        class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl p-4 sm:p-6"
+        (click)="$event.stopPropagation()">
+        <!-- Close button & header -->
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+              {{ activeVideo().category }}
+            </span>
+            <span class="text-xs text-slate-400">{{ activeVideo().timeAgo }}</span>
+          </div>
+          <button
+            (click)="closePlayer()"
+            class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Video Display -->
+        <div class="aspect-video bg-black rounded-xl overflow-hidden mb-4 relative flex items-center justify-center">
+          @if (activeVideo().videoUrl) {
+            <video
+              [src]="activeVideo().videoUrl"
+              controls
+              autoplay
+              class="w-full h-full object-contain"></video>
+          } @else {
+            <div class="text-center p-6 space-y-3">
+              <div class="w-16 h-16 rounded-full bg-indigo-600/30 text-indigo-400 flex items-center justify-center mx-auto">
+                <svg class="w-8 h-8 fill-current ml-1" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+              <h3 class="text-lg font-medium text-white">{{ activeVideo().title }}</h3>
+              <p class="text-xs text-slate-400 max-w-md mx-auto">
+                {{ activeVideo().isSample ? 'This is a demo preview card. Upload an .mp4 or .webm file to stream real video.' : 'No streamable video file attached to this record.' }}
+              </p>
+            </div>
+          }
+        </div>
+
+        <!-- Details -->
+        <div class="space-y-3">
+          <h2 class="text-xl font-bold text-white">{{ activeVideo().title }}</h2>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-rose-500 to-indigo-600 flex items-center justify-center text-white font-bold">
+              {{ activeVideo().creatorName.charAt(0).toUpperCase() }}
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-white">{{ activeVideo().creatorName }}</p>
+              <p class="text-xs text-slate-400">{{ activeVideo().views | number }} views</p>
+            </div>
+          </div>
+          @if (activeVideo().description) {
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/80 text-sm text-slate-300 leading-relaxed">
+              {{ activeVideo().description }}
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Video Upload Modal -->
+  @if (isUploadOpen()) {
+    <div
+      class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4"
+      (click)="closeUploadModal()">
+      <div
+        class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl p-6 relative max-h-[95vh] overflow-y-auto"
+        (click)="$event.stopPropagation()">
+        <!-- Header -->
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-5">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-white">Upload New Video</h3>
+          </div>
+          <button
+            (click)="closeUploadModal()"
+            class="text-slate-400 hover:text-white transition p-1 rounded-lg hover:bg-slate-800 cursor-pointer">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Alert Error -->
+        @if (uploadError()) {
+          <div class="mb-4 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-start gap-2.5">
+            <svg class="w-4 h-4 text-rose-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span class="flex-1">{{ uploadError() }}</span>
+          </div>
+        }
+
+        <!-- Upload Form -->
+        <form (submit)="handleUploadSubmit($event)" class="space-y-4">
+          <!-- Title -->
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1.5" for="upload-title">
+              Video Title <span class="text-rose-400">*</span>
+            </label>
+            <input
+              id="upload-title"
+              type="text"
+              required
+              [(ngModel)]="uploadTitle"
+              name="uploadTitle"
+              placeholder="e.g. My First Video"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" />
+          </div>
+
+          <!-- Description -->
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1.5" for="upload-desc">
+              Description
+            </label>
+            <textarea
+              id="upload-desc"
+              rows="3"
+              [(ngModel)]="uploadDescription"
+              name="uploadDescription"
+              placeholder="Tell viewers about your video..."
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm resize-none"></textarea>
+          </div>
+
+          <!-- Category -->
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1.5" for="upload-category">
+              Category
+            </label>
+            <select
+              id="upload-category"
+              [(ngModel)]="uploadCategory"
+              name="uploadCategory"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+              <option value="Tech">Tech</option>
+              <option value="Gaming">Gaming</option>
+              <option value="Music">Music</option>
+              <option value="Podcasts">Podcasts</option>
+              <option value="Trending">Trending</option>
+              <option value="Vlog">Vlog</option>
+            </select>
+          </div>
+
+          <!-- Video File -->
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1.5" for="video-file">
+              Video File (.mp4, .webm, .mov)
+            </label>
+            <input
+              id="video-file"
+              type="file"
+              accept="video/*"
+              (change)="onVideoFileChange($event)"
+              class="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer" />
+          </div>
+
+          <!-- Thumbnail File -->
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1.5" for="thumb-file">
+              Thumbnail Cover Image (.jpg, .png, .webp)
+            </label>
+            <input
+              id="thumb-file"
+              type="file"
+              accept="image/*"
+              (change)="onThumbFileChange($event)"
+              class="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer" />
+          </div>
+
+          <!-- Submit Buttons -->
+          <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+            <button
+              type="button"
+              (click)="closeUploadModal()"
+              class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-medium transition cursor-pointer">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              [disabled]="isUploading()"
+              class="px-5 py-2 rounded-xl bg-gradient-to-r from-rose-500 to-indigo-600 hover:from-rose-600 hover:to-indigo-700 text-white text-sm font-medium shadow-md shadow-rose-500/20 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+              @if (isUploading()) {
+                <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                </svg>
+                <span>Uploading...</span>
+              } @else {
+                <span>Publish Video</span>
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+</div>
