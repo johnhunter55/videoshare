@@ -128,7 +128,7 @@
     } @else {
       <!-- Auth Form Card -->
       <div
-        class="bg-mist-900 border border-mist-800 rounded-2xl p-6 sm:p-8 shadow-2xl backdrop-blur-sm"
+        class="bg-mauve-900 border border-amber-800/30 rounded-2xl p-6 sm:p-8 shadow-2xl backdrop-blur-sm"
       >
         <!-- Google OAuth Button -->
         <button
@@ -162,23 +162,21 @@
         <!-- Divider -->
         <div class="relative my-6 text-center">
           <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-slate-800"></div>
+            <div class="w-full border-t border-mauve-700"></div>
           </div>
-          <span class="relative px-3 text-xs uppercase tracking-wider text-slate-500 bg-slate-900">
+          <span class="relative px-3 text-xs uppercase tracking-wider text-amber-500 bg-mauve-900">
             or continue with email
           </span>
         </div>
 
         <!-- Mode Toggle Tabs -->
-        <div
-          class="grid grid-cols-2 p-1 bg-slate-950/80 rounded-xl mb-6 border border-slate-800/80"
-        >
+        <div class="grid grid-cols-2 p-1 bg-mauve-950/80 rounded-xl mb-6 border border-mauve-800">
           <button
             type="button"
             (click)="setMode(false)"
-            [class.bg-slate-800]="!isSignUp()"
+            [class.bg-mauve-800]="!isSignUp()"
             [class.text-white]="!isSignUp()"
-            [class.text-slate-400]="isSignUp()"
+            [class.text-mauve-400]="isSignUp()"
             class="py-2 text-sm font-medium rounded-lg transition cursor-pointer"
           >
             Sign In
@@ -186,9 +184,9 @@
           <button
             type="button"
             (click)="setMode(true)"
-            [class.bg-slate-800]="isSignUp()"
+            [class.bg-mauve-800]="isSignUp()"
             [class.text-white]="isSignUp()"
-            [class.text-slate-400]="!isSignUp()"
+            [class.text-mauve-400]="!isSignUp()"
             class="py-2 text-sm font-medium rounded-lg transition cursor-pointer"
           >
             Create Account
@@ -208,7 +206,7 @@
                 type="text"
                 [(ngModel)]="name"
                 placeholder="e.g. Alex Hunter"
-                class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50 focus:border-transparent text-sm"
               />
             </div>
           }
@@ -225,7 +223,7 @@
               autocomplete="email"
               [(ngModel)]="email"
               placeholder="you@example.com"
-              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50 focus:border-transparent text-sm"
             />
           </div>
 
@@ -241,7 +239,7 @@
               autocomplete="current-password"
               [(ngModel)]="password"
               placeholder="••••••••"
-              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50 focus:border-transparent text-sm"
             />
           </div>
 
@@ -258,7 +256,7 @@
                 autocomplete="new-password"
                 [(ngModel)]="passwordConfirm"
                 placeholder="••••••••"
-                class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50 focus:border-transparent text-sm"
               />
             </div>
           }
