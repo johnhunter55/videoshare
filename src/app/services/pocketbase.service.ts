@@ -4,14 +4,14 @@ import PocketBase, { RecordAuthResponse, RecordListOptions, RecordModel } from '
 export interface VideoRecord extends RecordModel {
   title: string;
   description?: string;
-  category?: string;
-  videoFile?: string;
-  thumbnail?: string;
-  creator?: string;
+  catigory?: 'league of legends' | 'valorant' | 'minecraft' | 'other' | string;
+  file: string;
+  user: string;
   views?: number;
+  visibility?: 'public' | 'unlisted' | 'private' | string;
+  json?: any;
   duration?: string;
   expand?: {
-    creator?: RecordModel;
     user?: RecordModel;
     [key: string]: any;
   };
@@ -89,12 +89,26 @@ export class PocketBaseService {
   }
 
   /**
+   * Fetch all registered users who have an account.
+   */
+  async getUsers(): Promise<RecordModel[]> {
+    try {
+      return await this.pb.collection('users').getFullList({
+        sort: 'name,email',
+      });
+    } catch (err) {
+      console.warn('Could not fetch users list:', err);
+      return [];
+    }
+  }
+
+  /**
    * Fetch list of videos from the PocketBase 'videos' collection.
    */
   async getVideos(options?: RecordListOptions): Promise<VideoRecord[]> {
-    const response = await this.pb.collection('videos').getList<VideoRecord>(1, 50, {
+    const response = await this.pb.collection('videos').getList<VideoRecord>(1, 100, {
       sort: '-created',
-      expand: 'creator,user',
+      expand: 'user,creator',
       ...options,
     });
     return response.items;
@@ -105,6 +119,56 @@ export class PocketBaseService {
    */
   async createVideo(data: FormData | Record<string, any>): Promise<VideoRecord> {
     return await this.pb.collection('videos').create<VideoRecord>(data);
+  }
+
+  /**
+   * Upload a video with realtime progress reporting using XMLHttpRequest.
+   */
+  createVideoWithProgress(
+    formData: FormData,
+    onProgress: (percent: number, loaded: number, total: number) => void,
+  ): Promise<VideoRecord> {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      const url = this.pb.buildURL('/api/collections/videos/records');
+
+      xhr.open('POST', url);
+
+      if (this.pb.authStore.token) {
+        xhr.setRequestHeader('Authorization', this.pb.authStore.token);
+      }
+
+      xhr.upload.onprogress = (event: ProgressEvent) => {
+        if (event.lengthComputable) {
+          const percent = Math.min(100, Math.round((event.loaded / event.total) * 100));
+          onProgress(percent, event.loaded, event.total);
+        }
+      };
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            const data = JSON.parse(xhr.responseText);
+            resolve(data as VideoRecord);
+          } catch {
+            resolve(xhr.responseText as any);
+          }
+        } else {
+          try {
+            const errData = JSON.parse(xhr.responseText);
+            reject(errData);
+          } catch {
+            reject(new Error(xhr.statusText || 'Upload failed'));
+          }
+        }
+      };
+
+      xhr.onerror = () => {
+        reject(new Error('Network error during video upload. Please check connection.'));
+      };
+
+      xhr.send(formData);
+    });
   }
 
   /**
