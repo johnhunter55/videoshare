@@ -20,6 +20,8 @@ export class UploadService {
   progress = signal(0);
   progressBytes = signal<{ loaded: string; total: string } | null>(null);
   statusText = signal<string>('');
+  uploadSpeed = signal<string>('');
+  eta = signal<string>('');
   currentTask = signal<UploadTask | null>(null);
   error = signal<string | null>(null);
 
@@ -36,9 +38,13 @@ export class UploadService {
     this.isMinimized.set(false);
     this.progress.set(0);
     this.progressBytes.set(null);
+    this.uploadSpeed.set('');
+    this.eta.set('');
     this.error.set(null);
     this.currentTask.set(meta);
     this.statusText.set('Starting upload in background...');
+
+    const startTime = Date.now();
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -59,6 +65,21 @@ export class UploadService {
             loaded: this.formatBytes(event.loaded),
             total: this.formatBytes(event.total),
           });
+
+          const elapsedSecs = (Date.now() - startTime) / 1000;
+          if (elapsedSecs > 0.8 && event.loaded > 0) {
+            const bytesPerSec = event.loaded / elapsedSecs;
+            this.uploadSpeed.set(`${this.formatBytes(bytesPerSec)}/s`);
+            const remainingBytes = event.total - event.loaded;
+            const remainingSecs = Math.max(0, Math.round(remainingBytes / bytesPerSec));
+            if (remainingSecs >= 60) {
+              const mins = Math.floor(remainingSecs / 60);
+              const secs = remainingSecs % 60;
+              this.eta.set(`${mins}m ${secs}s remaining`);
+            } else {
+              this.eta.set(`${remainingSecs}s remaining`);
+            }
+          }
 
           if (percent < 100) {
             this.statusText.set(`Uploading (${percent}%)...`);

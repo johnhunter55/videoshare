@@ -1,24 +1,51 @@
 <div class="min-h-screen bg-mist-950 text-slate-100 flex flex-col">
   <!-- Top Navigation Bar -->
-  <header class="sticky top-0 z-40 bg-mauve-900/90 backdrop-blur-md border-b border-amber-800/30 px-4 sm:px-6 py-3">
+  <header
+    class="sticky top-0 z-40 bg-mauve-900/90 backdrop-blur-md border-b border-amber-800/30 px-4 sm:px-6 py-3"
+  >
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
       <!-- Logo & Brand -->
       <a routerLink="/home" class="flex items-center gap-2.5 shrink-0 group cursor-pointer">
-        <div class="w-10 h-10 rounded-xl bg-linear-to-tr from-mauve-500 to-amber-600 flex items-center justify-center text-white shadow-md shadow-mauve-500/20 group-hover:scale-105 transition">
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <div
+          class="w-10 h-10 rounded-xl bg-linear-to-tr from-mauve-500 to-amber-600 flex items-center justify-center text-white shadow-md shadow-mauve-500/20 group-hover:scale-105 transition"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
         </div>
-        <span class="text-xl font-bold tracking-tight text-white hidden sm:inline">Video<span class="text-amber-500">Share</span></span>
+        <span class="text-xl font-bold tracking-tight text-white hidden sm:inline"
+          >Video<span class="text-amber-500">Share</span></span
+        >
       </a>
 
       <!-- Search Bar -->
       <div class="flex-1 max-w-xl mx-2 sm:mx-6">
         <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+          <div
+            class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400"
+          >
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
             </svg>
           </div>
           <input
@@ -26,13 +53,20 @@
             [ngModel]="searchQuery()"
             (ngModelChange)="searchQuery.set($event)"
             placeholder="Search clips, creators, or games..."
-            class="w-full pl-10 pr-9 py-2 rounded-xl bg-mauve-950 border border-mauve-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50 focus:border-transparent transition" />
+            class="w-full pl-10 pr-9 py-2 rounded-xl bg-mauve-950 border border-mauve-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50 focus:border-transparent transition"
+          />
           @if (searchQuery()) {
             <button
               (click)="searchQuery.set('')"
-              class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white cursor-pointer">
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white cursor-pointer"
+            >
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           }
@@ -47,10 +81,26 @@
             type="button"
             (click)="uploadService.isMinimized.set(false)"
             title="Click to view upload progress"
-            class="flex items-center gap-2 py-1.5 px-3 rounded-xl bg-mauve-800/90 border border-amber-500/50 text-amber-300 text-xs font-semibold cursor-pointer shadow-sm hover:border-amber-400 transition animate-pulse">
-            <svg class="animate-spin h-3.5 w-3.5 text-amber-400 shrink-0" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            class="flex items-center gap-2 py-1.5 px-3 rounded-xl bg-mauve-800/90 border border-amber-500/50 text-amber-300 text-xs font-semibold cursor-pointer shadow-sm hover:border-amber-400 transition animate-pulse"
+          >
+            <svg
+              class="animate-spin h-3.5 w-3.5 text-amber-400 shrink-0"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+              ></path>
             </svg>
             <span>Uploading {{ uploadService.progress() }}%</span>
           </button>
@@ -59,28 +109,54 @@
         <!-- Upload Button -->
         <button
           (click)="openUploadModal()"
-          class="flex items-center gap-2 py-2 px-3.5 rounded-xl bg-linear-to-tr from-mauve-500 to-amber-600 hover:from-mauve-600 hover:to-amber-700 text-white text-sm font-medium shadow-md shadow-mauve-500/20 transition cursor-pointer">
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          class="flex items-center gap-2 py-2 px-3.5 rounded-xl bg-linear-to-tr from-mauve-500 to-amber-600 hover:from-mauve-600 hover:to-amber-700 text-white text-sm font-medium shadow-md shadow-mauve-500/20 transition cursor-pointer"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
           </svg>
           <span class="hidden md:inline">Upload Clip</span>
         </button>
 
         <!-- User Chip & Sign Out -->
-        <div class="flex items-center gap-2 bg-mauve-800/80 border border-mauve-700/60 rounded-xl px-2.5 py-1.5">
-          <div class="w-7 h-7 rounded-lg bg-linear-to-tr from-mauve-500 to-amber-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
-            {{ (pbService.currentUser()?.['name'] || pbService.currentUser()?.['email'])?.charAt(0)?.toUpperCase() || 'U' }}
+        <div
+          class="flex items-center gap-2 bg-mauve-800/80 border border-mauve-700/60 rounded-xl px-2.5 py-1.5"
+        >
+          <div
+            class="w-7 h-7 rounded-lg bg-linear-to-tr from-mauve-500 to-amber-600 flex items-center justify-center text-white text-xs font-bold shrink-0"
+          >
+            {{
+              (pbService.currentUser()?.['name'] || pbService.currentUser()?.['email'])
+                ?.charAt(0)
+                ?.toUpperCase() || 'U'
+            }}
           </div>
-          <span class="text-xs font-medium text-slate-200 hidden lg:inline max-w-[120px] truncate">
+          <span class="text-xs font-medium text-slate-200 hidden lg:inline max-w-30 truncate">
             {{ pbService.currentUser()?.['name'] || pbService.currentUser()?.['email'] }}
           </span>
 
           <button
             (click)="handleLogout()"
             title="Sign Out"
-            class="text-slate-400 hover:text-amber-400 transition p-1 rounded-md cursor-pointer ml-1">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            class="text-slate-400 hover:text-amber-400 transition p-1 rounded-md cursor-pointer ml-1"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              />
             </svg>
           </button>
         </div>
@@ -107,7 +183,8 @@
             [class.bg-mauve-900]="selectedCategory() !== cat"
             [class.text-mauve-400]="selectedCategory() !== cat"
             [class.border-mauve-800]="selectedCategory() !== cat"
-            class="px-3.5 py-1.5 rounded-lg text-xs font-medium border hover:border-amber-600/50 hover:text-white transition cursor-pointer whitespace-nowrap">
+            class="px-3.5 py-1.5 rounded-lg text-xs font-medium border hover:border-amber-600/50 hover:text-white transition cursor-pointer whitespace-nowrap"
+          >
             {{ cat }}
           </button>
         }
@@ -122,10 +199,13 @@
             id="creator-select"
             [ngModel]="selectedUserFilter()"
             (ngModelChange)="setUserFilter($event)"
-            class="bg-mauve-900 border border-mauve-800 text-white rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-amber-500/50 cursor-pointer max-w-[170px] truncate">
+            class="bg-mauve-900 border border-mauve-800 text-white rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-amber-500/50 cursor-pointer max-w-42.5 truncate"
+          >
             <option value="all">👥 All Creators</option>
             @if (pbService.currentUser()) {
-              <option value="me">⭐ My Videos ({{ pbService.currentUser()?.['name'] || 'Me' }})</option>
+              <option value="me">
+                ⭐ My Videos ({{ pbService.currentUser()?.['name'] || 'Me' }})
+              </option>
             }
             @if (usersList().length > 0) {
               <optgroup label="Accounts">
@@ -146,7 +226,8 @@
             id="sort-select"
             [ngModel]="sortBy()"
             (ngModelChange)="setSortBy($event)"
-            class="bg-mauve-900 border border-mauve-800 text-white rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-amber-500/50 cursor-pointer">
+            class="bg-mauve-900 border border-mauve-800 text-white rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-amber-500/50 cursor-pointer"
+          >
             <option value="newest">🕒 Newest</option>
             <option value="oldest">⏳ Oldest</option>
             <option value="creator_asc">🔤 Creator (A-Z)</option>
@@ -160,18 +241,25 @@
   <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-6">
     <!-- Active Creator Filter Banner -->
     @if (selectedUserFilter() !== 'all') {
-      <div class="mb-5 flex items-center justify-between bg-mauve-900/60 border border-amber-800/30 rounded-xl px-4 py-2.5 text-xs">
+      <div
+        class="mb-5 flex items-center justify-between bg-mauve-900/60 border border-amber-800/30 rounded-xl px-4 py-2.5 text-xs"
+      >
         <div class="flex items-center gap-2">
           <span class="text-slate-400">Showing videos from:</span>
           <span class="text-amber-400 font-semibold">
-            {{ selectedUserObject()?.['name'] || selectedUserObject()?.['email'] || (selectedUserFilter() === 'me' ? 'My Videos' : 'Selected User') }}
+            {{
+              selectedUserObject()?.['name'] ||
+                selectedUserObject()?.['email'] ||
+                (selectedUserFilter() === 'me' ? 'My Videos' : 'Selected User')
+            }}
           </span>
           <span class="text-slate-500">({{ filteredVideos().length }} videos)</span>
         </div>
         <button
           type="button"
           (click)="clearUserFilter()"
-          class="text-amber-500 hover:text-amber-400 transition font-medium cursor-pointer underline">
+          class="text-amber-500 hover:text-amber-400 transition font-medium cursor-pointer underline"
+        >
           Show All Creators
         </button>
       </div>
@@ -180,7 +268,7 @@
     <!-- Loading State -->
     @if (isLoading()) {
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        @for (i of [1,2,3,4,5,6,7,8]; track i) {
+        @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
           <div class="animate-pulse space-y-3">
             <div class="aspect-video bg-mauve-900/60 rounded-xl"></div>
             <div class="flex gap-3">
@@ -196,27 +284,48 @@
     } @else if (videos().length === 0) {
       <!-- 0 Videos in Database -->
       <div class="py-20 text-center">
-        <div class="w-16 h-16 rounded-2xl bg-mauve-900 border border-amber-800/30 flex items-center justify-center mx-auto mb-4 text-amber-500">
-          <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        <div
+          class="w-16 h-16 rounded-2xl bg-mauve-900 border border-amber-800/30 flex items-center justify-center mx-auto mb-4 text-amber-500"
+        >
+          <svg
+            class="w-8 h-8"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="1.5"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+            />
           </svg>
         </div>
         <h3 class="text-lg font-semibold text-white">No videos uploaded yet</h3>
         <p class="text-sm text-slate-400 mt-1.5 max-w-md mx-auto">
-          Be the first creator to share a clip! Upload a League of Legends, Valorant, or Minecraft gameplay highlight.
+          Be the first creator to share a clip! Upload a League of Legends, Valorant, or Minecraft
+          gameplay highlight.
         </p>
         <button
           (click)="openUploadModal()"
-          class="mt-5 px-5 py-2.5 rounded-xl bg-linear-to-tr from-mauve-500 to-amber-600 hover:from-mauve-600 hover:to-amber-700 text-white text-sm font-medium transition cursor-pointer shadow-md shadow-mauve-500/20">
+          class="mt-5 px-5 py-2.5 rounded-xl bg-linear-to-tr from-mauve-500 to-amber-600 hover:from-mauve-600 hover:to-amber-700 text-white text-sm font-medium transition cursor-pointer shadow-md shadow-mauve-500/20"
+        >
           Upload Your First Video
         </button>
       </div>
     } @else if (filteredVideos().length === 0) {
       <!-- 0 Videos matching current search/filter -->
       <div class="py-20 text-center">
-        <div class="w-16 h-16 rounded-2xl bg-mauve-900 border border-amber-800/30 flex items-center justify-center mx-auto mb-4 text-amber-500">
+        <div
+          class="w-16 h-16 rounded-2xl bg-mauve-900 border border-amber-800/30 flex items-center justify-center mx-auto mb-4 text-amber-500"
+        >
           <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
           </svg>
         </div>
         <h3 class="text-lg font-semibold text-white">No matching videos</h3>
@@ -225,7 +334,8 @@
         </p>
         <button
           (click)="searchQuery.set(''); setCategory('All'); clearUserFilter()"
-          class="mt-4 px-4 py-2 rounded-xl bg-mauve-800 hover:bg-mauve-700 text-sm font-medium text-white transition cursor-pointer">
+          class="mt-4 px-4 py-2 rounded-xl bg-mauve-800 hover:bg-mauve-700 text-sm font-medium text-white transition cursor-pointer"
+        >
           Reset All Filters
         </button>
       </div>
@@ -235,38 +345,73 @@
         @for (video of filteredVideos(); track video.id) {
           <div
             (click)="openPlayer(video)"
-            class="group cursor-pointer flex flex-col bg-mauve-900/70 border border-amber-800/30 rounded-2xl overflow-hidden hover:border-amber-600/50 hover:shadow-xl hover:shadow-amber-500/5 transition duration-200">
+            class="group cursor-pointer flex flex-col bg-mauve-900/70 border border-amber-800/30 rounded-2xl overflow-hidden hover:border-amber-600/50 hover:shadow-xl hover:shadow-amber-500/5 transition duration-200"
+          >
             <!-- Video Thumbnail / Gameplay Preview Container -->
             <div class="aspect-video relative bg-mauve-950 overflow-hidden">
-              <!-- Game-specific styled preview canvas -->
-              <div class="w-full h-full bg-linear-to-br from-mauve-950 via-mauve-900 to-amber-950/40 flex flex-col items-center justify-center p-4 text-center">
-                <div class="w-12 h-12 rounded-2xl bg-amber-600/20 text-amber-400 flex items-center justify-center mb-2 shadow-inner">
-                  <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
+              @if (video.thumbnailUrl) {
+                <img
+                  [src]="video.thumbnailUrl"
+                  [alt]="video.title"
+                  class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                  loading="lazy"
+                />
+              } @else if (video.videoUrl) {
+                <!-- Real video frame preview using #t=0.5 with preload metadata -->
+                <video
+                  [src]="video.videoUrl + '#t=0.5'"
+                  preload="metadata"
+                  muted
+                  playsinline
+                  class="w-full h-full object-cover group-hover:scale-105 transition duration-300 pointer-events-none"
+                ></video>
+              } @else {
+                <!-- Game-specific styled preview canvas fallback -->
+                <div
+                  class="w-full h-full bg-linear-to-br from-mauve-950 via-mauve-900 to-amber-950/40 flex flex-col items-center justify-center p-4 text-center"
+                >
+                  <div
+                    class="w-12 h-12 rounded-2xl bg-amber-600/20 text-amber-400 flex items-center justify-center mb-2 shadow-inner"
+                  >
+                    <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                  <span class="text-[11px] font-semibold text-amber-400 uppercase tracking-wider">{{
+                    video.categoryDisplay
+                  }}</span>
                 </div>
-                <span class="text-[11px] font-semibold text-amber-400 uppercase tracking-wider">{{ video.categoryDisplay }}</span>
-              </div>
+              }
 
               <!-- Game Category Badge (overlay) -->
-              <span class="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/80 text-[10px] font-semibold text-amber-300 backdrop-blur-xs border border-amber-500/20">
+              <span
+                class="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/80 text-[10px] font-semibold text-amber-300 backdrop-blur-xs border border-amber-500/20"
+              >
                 {{ video.categoryDisplay }}
               </span>
 
               <!-- Visibility Badge (if unlisted or private) -->
               @if (video.visibility === 'private') {
-                <span class="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-rose-950/80 text-[10px] font-medium text-rose-300 border border-rose-500/30">
+                <span
+                  class="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-rose-950/80 text-[10px] font-medium text-rose-300 border border-rose-500/30"
+                >
                   🔒 Private
                 </span>
               } @else if (video.visibility === 'unlisted') {
-                <span class="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-slate-900/80 text-[10px] font-medium text-slate-300 border border-slate-700">
+                <span
+                  class="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-slate-900/80 text-[10px] font-medium text-slate-300 border border-slate-700"
+                >
                   🔗 Unlisted
                 </span>
               }
 
               <!-- Hover Play Overlay -->
-              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                <div class="w-12 h-12 rounded-full bg-linear-to-tr from-mauve-500 to-amber-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition shadow-mauve-500/30">
+              <div
+                class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center"
+              >
+                <div
+                  class="w-12 h-12 rounded-full bg-linear-to-tr from-mauve-500 to-amber-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition shadow-mauve-500/30"
+                >
                   <svg class="w-6 h-6 fill-current ml-0.5" viewBox="0 0 24 24">
                     <path d="M8 5v14l11-7z" />
                   </svg>
@@ -281,34 +426,61 @@
                 type="button"
                 (click)="$event.stopPropagation(); setUserFilter(video.creatorId)"
                 [title]="'Filter by ' + video.creatorName"
-                class="w-9 h-9 rounded-full bg-linear-to-tr from-mauve-500 to-amber-600 flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-sm hover:scale-105 transition cursor-pointer">
+                class="w-9 h-9 rounded-full bg-linear-to-tr from-mauve-500 to-amber-600 flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-sm hover:scale-105 transition cursor-pointer"
+              >
                 {{ video.creatorName.charAt(0).toUpperCase() }}
               </button>
 
               <!-- Title, Creator, Meta -->
               <div class="flex-1 min-w-0">
                 <div class="flex items-start justify-between gap-1">
-                  <h4 class="text-sm font-semibold text-white line-clamp-2 leading-snug group-hover:text-amber-400 transition">
+                  <h4
+                    class="text-sm font-semibold text-white line-clamp-2 leading-snug group-hover:text-amber-400 transition"
+                  >
                     {{ video.title }}
                   </h4>
-                  <!-- Delete icon if the user owns this video -->
+                  <!-- Owner actions (Edit & Delete) -->
                   @if (video.creatorId === pbService.currentUser()?.id) {
-                    <button
-                      type="button"
-                      (click)="handleDeleteVideo(video, $event)"
-                      title="Delete video"
-                      class="text-slate-500 hover:text-rose-400 p-1 rounded-md transition cursor-pointer shrink-0">
-                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
+                    <div class="flex items-center gap-0.5 shrink-0">
+                      <button
+                        type="button"
+                        (click)="openEditModal(video, $event)"
+                        title="Edit video"
+                        class="text-slate-500 hover:text-amber-400 p-1 rounded-md transition cursor-pointer"
+                      >
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        (click)="promptDeleteVideo(video, $event)"
+                        title="Delete video"
+                        class="text-slate-500 hover:text-rose-400 p-1 rounded-md transition cursor-pointer"
+                      >
+                        <svg
+                          class="w-3.5 h-3.5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                      </button>
+                    </div>
                   }
                 </div>
 
                 <button
                   type="button"
                   (click)="$event.stopPropagation(); setUserFilter(video.creatorId)"
-                  class="text-xs text-slate-400 mt-1 truncate hover:text-amber-400 transition cursor-pointer text-left block">
+                  class="text-xs text-slate-400 mt-1 truncate hover:text-amber-400 transition cursor-pointer text-left block"
+                >
                   {{ video.creatorName }}
                 </button>
                 <div class="flex items-center gap-1.5 text-xs text-slate-500 mt-0.5">
@@ -326,18 +498,24 @@
   @if (activeVideo()) {
     <div
       class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6"
-      (click)="closePlayer()">
+      (click)="closePlayer()"
+    >
       <div
         class="bg-mauve-900 border border-amber-800/40 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl p-4 sm:p-6"
-        (click)="$event.stopPropagation()">
+        (click)="$event.stopPropagation()"
+      >
         <!-- Header -->
         <div class="flex items-center justify-between pb-3 border-b border-mauve-800 mb-4">
           <div class="flex items-center gap-2">
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+            <span
+              class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30"
+            >
               {{ activeVideo()!.categoryDisplay }}
             </span>
             @if (activeVideo()!.visibility !== 'public') {
-              <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 capitalize">
+              <span
+                class="px-2 py-0.5 rounded-full text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 capitalize"
+              >
                 {{ activeVideo()!.visibility }}
               </span>
             }
@@ -345,24 +523,35 @@
           </div>
           <button
             (click)="closePlayer()"
-            class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-mauve-800 transition cursor-pointer">
+            class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-mauve-800 transition cursor-pointer"
+          >
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
 
         <!-- Video Player -->
-        <div class="aspect-video bg-black rounded-xl overflow-hidden mb-4 relative flex items-center justify-center">
+        <div
+          class="aspect-video bg-black rounded-xl overflow-hidden mb-4 relative flex items-center justify-center"
+        >
           @if (activeVideo()!.videoUrl) {
             <video
               [src]="activeVideo()!.videoUrl"
               controls
               autoplay
-              class="w-full h-full object-contain"></video>
+              class="w-full h-full object-contain"
+            ></video>
           } @else {
             <div class="text-center p-6 space-y-3">
-              <div class="w-16 h-16 rounded-full bg-amber-600/20 text-amber-400 flex items-center justify-center mx-auto">
+              <div
+                class="w-16 h-16 rounded-full bg-amber-600/20 text-amber-400 flex items-center justify-center mx-auto"
+              >
                 <svg class="w-8 h-8 fill-current ml-1" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z" />
                 </svg>
@@ -380,15 +569,38 @@
           <div class="flex items-start justify-between gap-4">
             <h2 class="text-xl font-bold text-white">{{ activeVideo()!.title }}</h2>
             @if (activeVideo()!.creatorId === pbService.currentUser()?.id) {
-              <button
-                type="button"
-                (click)="handleDeleteVideo(activeVideo()!, $event)"
-                class="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-medium transition cursor-pointer flex items-center gap-1.5 shrink-0">
-                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-                Delete Video
-              </button>
+              <div class="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  (click)="openEditModal(activeVideo()!, $event)"
+                  class="px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-medium transition cursor-pointer flex items-center gap-1.5 shrink-0"
+                >
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                    />
+                  </svg>
+                  Edit Video
+                </button>
+                <button
+                  type="button"
+                  (click)="promptDeleteVideo(activeVideo()!, $event)"
+                  class="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-medium transition cursor-pointer flex items-center gap-1.5 shrink-0"
+                >
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                  Delete Video
+                </button>
+              </div>
             }
           </div>
 
@@ -396,18 +608,24 @@
             <button
               type="button"
               (click)="closePlayer(); setUserFilter(activeVideo()!.creatorId)"
-              class="w-10 h-10 rounded-full bg-linear-to-tr from-mauve-500 to-amber-600 flex items-center justify-center text-white font-bold cursor-pointer hover:scale-105 transition">
+              class="w-10 h-10 rounded-full bg-linear-to-tr from-mauve-500 to-amber-600 flex items-center justify-center text-white font-bold cursor-pointer hover:scale-105 transition"
+            >
               {{ activeVideo()!.creatorName.charAt(0).toUpperCase() }}
             </button>
             <div>
-              <p class="text-sm font-semibold text-white cursor-pointer hover:text-amber-400 transition" (click)="closePlayer(); setUserFilter(activeVideo()!.creatorId)">
+              <p
+                class="text-sm font-semibold text-white cursor-pointer hover:text-amber-400 transition"
+                (click)="closePlayer(); setUserFilter(activeVideo()!.creatorId)"
+              >
                 {{ activeVideo()!.creatorName }}
               </p>
               <p class="text-xs text-slate-400">Creator Account</p>
             </div>
           </div>
           @if (activeVideo()!.description) {
-            <div class="bg-mauve-950 p-4 rounded-xl border border-mauve-800 text-sm text-slate-300 leading-relaxed whitespace-pre-line">
+            <div
+              class="bg-mauve-950 p-4 rounded-xl border border-mauve-800 text-sm text-slate-300 leading-relaxed whitespace-pre-line"
+            >
               {{ activeVideo()!.description }}
             </div>
           }
@@ -420,37 +638,66 @@
   @if (isUploadOpen()) {
     <div
       class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4"
-      (click)="closeUploadModal()">
+      (click)="closeUploadModal()"
+    >
       <div
         class="bg-mauve-900 border border-amber-800/40 rounded-2xl w-full max-w-lg shadow-2xl p-6 relative max-h-[95vh] overflow-y-auto"
-        (click)="$event.stopPropagation()">
+        (click)="$event.stopPropagation()"
+      >
         <!-- Header -->
         <div class="flex items-center justify-between pb-4 border-b border-mauve-800 mb-5">
           <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center">
+            <div
+              class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center"
+            >
               <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 4v16m8-8H4"
+                />
               </svg>
             </div>
             <div>
               <h3 class="text-lg font-semibold text-white">Upload Game Clip</h3>
-              <p class="text-[11px] text-slate-400">Uploads run in the background so you can keep browsing!</p>
+              <p class="text-[11px] text-slate-400">
+                Uploads run in the background so you can keep browsing!
+              </p>
             </div>
           </div>
           <button
             (click)="closeUploadModal()"
-            class="text-slate-400 hover:text-white transition p-1 rounded-lg hover:bg-mauve-800 cursor-pointer">
+            class="text-slate-400 hover:text-white transition p-1 rounded-lg hover:bg-mauve-800 cursor-pointer"
+          >
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
 
         <!-- Alert Error -->
         @if (uploadError()) {
-          <div class="mb-4 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-start gap-2.5">
-            <svg class="w-4 h-4 text-rose-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          <div
+            class="mb-4 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-start gap-2.5"
+          >
+            <svg
+              class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
             </svg>
             <span class="flex-1">{{ uploadError() }}</span>
           </div>
@@ -470,7 +717,8 @@
               [(ngModel)]="uploadTitle"
               name="uploadTitle"
               placeholder="e.g. Insane 1v5 Pentakill"
-              class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm" />
+              class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm"
+            />
           </div>
 
           <!-- Category (catigory in PocketBase) & Visibility Row -->
@@ -483,7 +731,8 @@
                 id="upload-category"
                 [(ngModel)]="uploadCategory"
                 name="uploadCategory"
-                class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm">
+                class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm"
+              >
                 <option value="league of legends">League of Legends</option>
                 <option value="valorant">Valorant</option>
                 <option value="minecraft">Minecraft</option>
@@ -492,14 +741,18 @@
             </div>
 
             <div>
-              <label class="block text-xs font-medium text-slate-300 mb-1.5" for="upload-visibility">
+              <label
+                class="block text-xs font-medium text-slate-300 mb-1.5"
+                for="upload-visibility"
+              >
                 Visibility <span class="text-rose-400">*</span>
               </label>
               <select
                 id="upload-visibility"
                 [(ngModel)]="uploadVisibility"
                 name="uploadVisibility"
-                class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm">
+                class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm"
+              >
                 <option value="public">Public (Everyone)</option>
                 <option value="unlisted">Unlisted (Anyone with link)</option>
                 <option value="private">Private (Only you)</option>
@@ -518,7 +771,8 @@
               [(ngModel)]="uploadDescription"
               name="uploadDescription"
               placeholder="Tell viewers about your play or moment..."
-              class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm resize-none"></textarea>
+              class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm resize-none"
+            ></textarea>
           </div>
 
           <!-- Video File (Required by PocketBase schema) -->
@@ -526,25 +780,37 @@
             <label class="block text-xs font-medium text-slate-300 mb-1.5" for="video-file">
               Video File (.mp4, .webm, .mov) <span class="text-rose-400">*</span>
             </label>
-            <div class="relative border-2 border-dashed border-mauve-800 hover:border-amber-500/50 rounded-xl p-4 transition bg-mauve-950 text-center">
+            <div
+              class="relative border-2 border-dashed border-mauve-800 hover:border-amber-500/50 rounded-xl p-4 transition bg-mauve-950 text-center"
+            >
               <input
                 id="video-file"
                 type="file"
                 required
                 accept="video/*"
                 (change)="onVideoFileChange($event)"
-                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              />
               <div class="flex flex-col items-center justify-center gap-1.5 pointer-events-none">
-                <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                <div
+                  class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center"
+                >
                   <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                    />
                   </svg>
                 </div>
                 @if (selectedFileName()) {
                   <p class="text-xs font-medium text-amber-400">{{ selectedFileName() }}</p>
                   <p class="text-[11px] text-slate-400">Click to choose a different video</p>
                 } @else {
-                  <p class="text-xs text-slate-300 font-medium">Click to select video or drag & drop</p>
+                  <p class="text-xs text-slate-300 font-medium">
+                    Click to select video or drag & drop
+                  </p>
                   <p class="text-[11px] text-slate-500">MP4, WebM, or MOV</p>
                 }
               </div>
@@ -556,16 +822,305 @@
             <button
               type="button"
               (click)="closeUploadModal()"
-              class="px-4 py-2 rounded-xl bg-mauve-800 hover:bg-mauve-700 text-slate-300 text-sm font-medium transition cursor-pointer">
+              class="px-4 py-2 rounded-xl bg-mauve-800 hover:bg-mauve-700 text-slate-300 text-sm font-medium transition cursor-pointer"
+            >
               Cancel
             </button>
             <button
               type="submit"
-              class="px-5 py-2.5 rounded-xl bg-linear-to-tr from-mauve-500 to-amber-600 hover:from-mauve-600 hover:to-amber-700 text-white text-sm font-medium shadow-md shadow-mauve-500/20 transition cursor-pointer flex items-center gap-2">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              class="px-5 py-2.5 rounded-xl bg-linear-to-tr from-mauve-500 to-amber-600 hover:from-mauve-600 hover:to-amber-700 text-white text-sm font-medium shadow-md shadow-mauve-500/20 transition cursor-pointer flex items-center gap-2"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                />
               </svg>
               <span>Upload in Background</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+  <!-- Custom Delete Confirmation Modal -->
+  @if (videoToDelete()) {
+    <div
+      class="fixed inset-0 z-60 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4"
+      (click)="cancelDelete()"
+    >
+      <div
+        class="bg-mauve-900 border border-rose-900/60 rounded-2xl w-full max-w-md shadow-2xl p-6 relative"
+        (click)="$event.stopPropagation()"
+      >
+        <!-- Icon & Header -->
+        <div class="flex items-start gap-4">
+          <div
+            class="w-12 h-12 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-400 flex items-center justify-center shrink-0"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h3 class="text-lg font-bold text-white">Delete Video</h3>
+            <p class="text-xs text-slate-400 mt-1">
+              Are you sure you want to permanently delete this clip? This action cannot be undone.
+            </p>
+          </div>
+        </div>
+
+        <!-- Video Info Card -->
+        <div
+          class="mt-4 p-3 rounded-xl bg-mauve-950 border border-mauve-800 flex items-center gap-3"
+        >
+          <div
+            class="w-10 h-10 rounded-lg bg-mauve-900 border border-amber-800/30 flex items-center justify-center text-amber-400 shrink-0 font-bold text-xs"
+          >
+            ▶
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="text-xs font-semibold text-white truncate">{{ videoToDelete()?.title }}</p>
+            <p class="text-[10px] text-slate-400 uppercase tracking-wider">
+              {{ videoToDelete()?.categoryDisplay }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Error Message if Delete Fails -->
+        @if (deleteError()) {
+          <div
+            class="mt-3 p-3 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs"
+          >
+            {{ deleteError() }}
+          </div>
+        }
+
+        <!-- Actions -->
+        <div class="mt-6 flex items-center justify-end gap-3">
+          <button
+            type="button"
+            (click)="cancelDelete()"
+            [disabled]="isDeleting()"
+            class="px-4 py-2 rounded-xl bg-mauve-800 hover:bg-mauve-700 text-slate-300 text-xs font-medium transition cursor-pointer disabled:opacity-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            (click)="confirmDelete()"
+            [disabled]="isDeleting()"
+            class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-lg shadow-rose-900/40 transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
+          >
+            @if (isDeleting()) {
+              <svg class="animate-spin w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+              </svg>
+              <span>Deleting...</span>
+            } @else {
+              <span>Delete Permanently</span>
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Edit Video Modal -->
+  @if (videoToEdit()) {
+    <div
+      class="fixed inset-0 z-60 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4"
+      (click)="closeEditModal()"
+    >
+      <div
+        class="bg-mauve-900 border border-amber-800/40 rounded-2xl w-full max-w-lg shadow-2xl p-6 relative max-h-[95vh] overflow-y-auto"
+        (click)="$event.stopPropagation()"
+      >
+        <!-- Header -->
+        <div class="flex items-center justify-between pb-4 border-b border-mauve-800 mb-5">
+          <div class="flex items-center gap-2.5">
+            <div
+              class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                />
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-white">Edit Video</h3>
+              <p class="text-xs text-slate-400">Update clip title, category, and details</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            (click)="closeEditModal()"
+            [disabled]="isSavingEdit()"
+            class="text-slate-400 hover:text-white transition p-1.5 rounded-lg hover:bg-mauve-800 cursor-pointer disabled:opacity-50"
+          >
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Error Alert -->
+        @if (editError()) {
+          <div
+            class="mb-4 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs"
+          >
+            {{ editError() }}
+          </div>
+        }
+
+        <!-- Edit Form -->
+        <form (submit)="handleEditSubmit($event)" class="space-y-4">
+          <!-- Title -->
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1.5" for="edit-title">
+              Video Title <span class="text-rose-400">*</span>
+            </label>
+            <input
+              id="edit-title"
+              type="text"
+              required
+              [(ngModel)]="editTitle"
+              name="editTitle"
+              placeholder="e.g. Insane 1v5 Pentakill"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm"
+            />
+          </div>
+
+          <!-- Category & Visibility Row -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1.5" for="edit-category">
+                Game Category <span class="text-rose-400">*</span>
+              </label>
+              <select
+                id="edit-category"
+                [(ngModel)]="editCategory"
+                name="editCategory"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm cursor-pointer"
+              >
+                <option value="league of legends">League of Legends</option>
+                <option value="valorant">Valorant</option>
+                <option value="minecraft">Minecraft</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1.5" for="edit-visibility">
+                Visibility <span class="text-rose-400">*</span>
+              </label>
+              <select
+                id="edit-visibility"
+                [(ngModel)]="editVisibility"
+                name="editVisibility"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm cursor-pointer"
+              >
+                <option value="public">Public (Everyone)</option>
+                <option value="unlisted">Unlisted (Anyone with link)</option>
+                <option value="private">Private (Only you)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1.5" for="edit-desc">
+              Description
+            </label>
+            <textarea
+              id="edit-desc"
+              rows="3"
+              [(ngModel)]="editDescription"
+              name="editDescription"
+              placeholder="Tell viewers about your play or moment..."
+              class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm resize-none"
+            ></textarea>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex items-center justify-end gap-3 pt-4 border-t border-mauve-800">
+            <button
+              type="button"
+              (click)="closeEditModal()"
+              [disabled]="isSavingEdit()"
+              class="px-4 py-2.5 rounded-xl bg-mauve-800 hover:bg-mauve-700 text-slate-300 text-xs font-medium transition cursor-pointer disabled:opacity-50"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              [disabled]="isSavingEdit()"
+              class="px-5 py-2.5 rounded-xl bg-linear-to-tr from-mauve-500 to-amber-600 hover:from-mauve-600 hover:to-amber-700 text-white text-xs font-semibold shadow-md shadow-mauve-500/20 transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
+            >
+              @if (isSavingEdit()) {
+                <svg class="animate-spin w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
+                </svg>
+                <span>Saving...</span>
+              } @else {
+                <span>Save Changes</span>
+              }
             </button>
           </div>
         </form>
@@ -577,29 +1132,64 @@
   @if (uploadService.isUploading() || uploadService.isComplete() || uploadService.error()) {
     @if (!uploadService.isMinimized()) {
       <!-- Expanded Floating Widget -->
-      <div class="fixed bottom-5 right-5 z-50 w-80 sm:w-96 bg-mauve-900 border border-amber-800/60 rounded-2xl shadow-2xl p-4 backdrop-blur-md transition-all duration-200">
+      <div
+        class="fixed bottom-5 right-5 z-50 w-80 sm:w-96 bg-mauve-900 border border-amber-800/60 rounded-2xl shadow-2xl p-4 backdrop-blur-md transition-all duration-200"
+      >
         <!-- Widget Header -->
         <div class="flex items-center justify-between pb-2.5 border-b border-mauve-800/80 mb-3">
           <div class="flex items-center gap-2">
             @if (uploadService.isComplete()) {
-              <div class="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <div
+                class="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                >
                   <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
               <span class="text-xs font-bold text-emerald-400">Upload Complete!</span>
             } @else if (uploadService.error()) {
-              <div class="w-6 h-6 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center shrink-0">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <div
+                class="w-6 h-6 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center shrink-0"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
               </div>
               <span class="text-xs font-bold text-rose-400">Upload Error</span>
             } @else {
-              <div class="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+              <div
+                class="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0"
+              >
                 <svg class="animate-spin w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
                 </svg>
               </div>
               <span class="text-xs font-bold text-amber-400">Uploading in Background</span>
@@ -613,8 +1203,15 @@
                 type="button"
                 (click)="uploadService.toggleMinimize()"
                 title="Minimize widget"
-                class="p-1 rounded-md text-slate-400 hover:text-white hover:bg-mauve-800 transition cursor-pointer">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                class="p-1 rounded-md text-slate-400 hover:text-white hover:bg-mauve-800 transition cursor-pointer"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
                   <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
@@ -623,10 +1220,19 @@
             <!-- Close / Cancel Button -->
             <button
               type="button"
-              (click)="uploadService.isUploading() ? uploadService.cancelUpload() : uploadService.dismiss()"
+              (click)="
+                uploadService.isUploading() ? uploadService.cancelUpload() : uploadService.dismiss()
+              "
               [title]="uploadService.isUploading() ? 'Cancel upload' : 'Dismiss'"
-              class="p-1 rounded-md text-slate-400 hover:text-white hover:bg-mauve-800 transition cursor-pointer">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              class="p-1 rounded-md text-slate-400 hover:text-white hover:bg-mauve-800 transition cursor-pointer"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
@@ -637,31 +1243,54 @@
         <div class="space-y-2.5">
           <div class="flex items-start justify-between gap-2">
             <div class="min-w-0 flex-1">
-              <p class="text-xs font-semibold text-white truncate">{{ uploadService.currentTask()?.title }}</p>
-              <span class="inline-block mt-0.5 px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              <p class="text-xs font-semibold text-white truncate">
+                {{ uploadService.currentTask()?.title }}
+              </p>
+              <span
+                class="inline-block mt-0.5 px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30"
+              >
                 {{ uploadService.currentTask()?.category }}
               </span>
             </div>
             @if (uploadService.isUploading()) {
-              <span class="font-mono font-bold text-amber-400 text-sm shrink-0">{{ uploadService.progress() }}%</span>
+              <span class="font-mono font-bold text-amber-400 text-sm shrink-0"
+                >{{ uploadService.progress() }}%</span
+              >
             }
           </div>
 
           @if (uploadService.isUploading()) {
             <!-- Animated Progress Bar -->
-            <div class="w-full h-2.5 bg-mauve-950 rounded-full overflow-hidden p-0.5 border border-mauve-800">
+            <div
+              class="w-full h-2.5 bg-mauve-950 rounded-full overflow-hidden p-0.5 border border-mauve-800"
+            >
               <div
                 class="h-full bg-linear-to-r from-mauve-500 via-amber-500 to-amber-400 rounded-full transition-all duration-150 ease-out shadow-sm shadow-amber-500/40"
-                [style.width.%]="uploadService.progress()"></div>
+                [style.width.%]="uploadService.progress()"
+              ></div>
             </div>
 
             <!-- Transfer details & Status text -->
             <div class="flex items-center justify-between text-[11px] text-slate-400 font-mono">
-              <span>{{ uploadService.progressBytes()?.loaded || '0 B' }} / {{ uploadService.progressBytes()?.total || '...' }}</span>
-              <span class="text-slate-400 text-[10px]">{{ uploadService.statusText() }}</span>
+              <span>
+                {{ uploadService.progressBytes()?.loaded || '0 B' }} /
+                {{ uploadService.progressBytes()?.total || '...' }}
+                @if (uploadService.uploadSpeed()) {
+                  <span class="text-amber-400/90 font-medium ml-1">({{ uploadService.uploadSpeed() }})</span>
+                }
+              </span>
+              <span>
+                @if (uploadService.eta()) {
+                  <span class="text-slate-300 text-[10px]">{{ uploadService.eta() }}</span>
+                } @else {
+                  <span class="text-slate-400 text-[10px]">{{ uploadService.statusText() }}</span>
+                }
+              </span>
             </div>
           } @else if (uploadService.isComplete()) {
-            <p class="text-xs text-slate-300">Your clip has published and the feed has been refreshed!</p>
+            <p class="text-xs text-slate-300">
+              Your clip has published and the feed has been refreshed!
+            </p>
           } @else if (uploadService.error()) {
             <p class="text-xs text-rose-300 leading-snug">{{ uploadService.error() }}</p>
           }
@@ -673,18 +1302,45 @@
         type="button"
         (click)="uploadService.toggleMinimize()"
         title="Click to expand upload details"
-        class="fixed bottom-5 right-5 z-50 bg-mauve-900 border border-amber-800/60 hover:border-amber-500/50 rounded-full px-4 py-2.5 shadow-2xl flex items-center gap-3 cursor-pointer transition group backdrop-blur-md">
-        <div class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+        class="fixed bottom-5 right-5 z-50 bg-mauve-900 border border-amber-800/60 hover:border-amber-500/50 rounded-full px-4 py-2.5 shadow-2xl flex items-center gap-3 cursor-pointer transition group backdrop-blur-md"
+      >
+        <div
+          class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0"
+        >
           <svg class="animate-spin w-3 h-3" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+            ></path>
           </svg>
         </div>
         <div class="text-left text-xs max-w-40 sm:max-w-56 truncate">
-          <span class="font-medium text-white truncate block">{{ uploadService.currentTask()?.title }}</span>
-          <span class="text-[10px] font-mono text-amber-400">{{ uploadService.progress() }}% uploaded</span>
+          <span class="font-medium text-white truncate block">{{
+            uploadService.currentTask()?.title
+          }}</span>
+          <span class="text-[10px] font-mono text-amber-400">
+            {{ uploadService.progress() }}% uploaded
+            @if (uploadService.uploadSpeed()) {
+              • {{ uploadService.uploadSpeed() }}
+            }
+          </span>
         </div>
-        <svg class="w-4 h-4 text-slate-400 group-hover:text-white transition shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <svg
+          class="w-4 h-4 text-slate-400 group-hover:text-white transition shrink-0"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
           <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
         </svg>
       </button>

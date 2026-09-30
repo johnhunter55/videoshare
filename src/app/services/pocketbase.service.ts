@@ -172,6 +172,16 @@ export class PocketBaseService {
   }
 
   /**
+   * Update video record details (title, category, visibility, description).
+   */
+  async updateVideo(
+    id: string,
+    data: Partial<VideoRecord> | { [key: string]: any },
+  ): Promise<VideoRecord> {
+    return (await this.pb.collection('videos').update(id, data)) as unknown as VideoRecord;
+  }
+
+  /**
    * Delete a video by its ID.
    */
   async deleteVideo(id: string): Promise<boolean> {

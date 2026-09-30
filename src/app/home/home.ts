@@ -60,6 +60,20 @@ export class Home implements OnInit {
   selectedVideoFile: File | null = null;
   selectedFileName = signal<string | null>(null);
 
+  // Edit Video Modal State
+  videoToEdit = signal<DisplayVideo | null>(null);
+  editTitle = '';
+  editDescription = '';
+  editCategory: 'league of legends' | 'valorant' | 'minecraft' | 'other' = 'league of legends';
+  editVisibility: 'public' | 'unlisted' | 'private' = 'public';
+  isSavingEdit = signal(false);
+  editError = signal<string | null>(null);
+
+  // Custom Delete Modal State
+  videoToDelete = signal<DisplayVideo | null>(null);
+  isDeleting = signal(false);
+  deleteError = signal<string | null>(null);
+
   // Active Video Player Modal
   activeVideo = signal<DisplayVideo | null>(null);
 
@@ -98,7 +112,7 @@ export class Home implements OnInit {
         timeAgo: this.formatDate(v['created']),
         created: v['created'],
         duration: v.duration || 'Video',
-        thumbnailUrl: '',
+        thumbnailUrl: v['thumbnail'] ? this.pbService.getFileUrl(v, v['thumbnail']) : '',
         videoUrl: vidUrl,
         rawRecord: v,
       };
@@ -279,11 +293,25 @@ export class Home implements OnInit {
     });
   }
 
-  async handleDeleteVideo(video: DisplayVideo, event: Event): Promise<void> {
-    event.stopPropagation();
-    if (!confirm(`Are you sure you want to delete "${video.title}"?`)) {
-      return;
-    }
+  // Custom Delete Confirmation Modal Handlers
+  promptDeleteVideo(video: DisplayVideo, event?: Event): void {
+    event?.stopPropagation();
+    this.deleteError.set(null);
+    this.videoToDelete.set(video);
+  }
+
+  cancelDelete(): void {
+    if (this.isDeleting()) return;
+    this.videoToDelete.set(null);
+    this.deleteError.set(null);
+  }
+
+  async confirmDelete(): Promise<void> {
+    const video = this.videoToDelete();
+    if (!video) return;
+
+    this.isDeleting.set(true);
+    this.deleteError.set(null);
 
     try {
       await this.pbService.deleteVideo(video.id);
@@ -291,8 +319,80 @@ export class Home implements OnInit {
         this.closePlayer();
       }
       await this.loadVideos();
+      this.videoToDelete.set(null);
     } catch (err: any) {
-      alert('Could not delete video: ' + (err?.message || 'Error occurred.'));
+      this.deleteError.set(err?.message || 'Failed to delete video. Please try again.');
+    } finally {
+      this.isDeleting.set(false);
+    }
+  }
+
+  handleDeleteVideo(video: DisplayVideo, event: Event): void {
+    this.promptDeleteVideo(video, event);
+  }
+
+  // Edit Video Modal Handlers
+  openEditModal(video: DisplayVideo, event?: Event): void {
+    event?.stopPropagation();
+    this.editTitle = video.title;
+    this.editDescription = video.description || '';
+    const cat = (video.catigory || 'valorant').toLowerCase();
+    this.editCategory =
+      cat === 'league of legends' || cat === 'valorant' || cat === 'minecraft' ? cat : 'other';
+    const vis = (video.visibility || 'public').toLowerCase();
+    this.editVisibility = vis === 'unlisted' || vis === 'private' ? vis : 'public';
+    this.editError.set(null);
+    this.videoToEdit.set(video);
+  }
+
+  closeEditModal(): void {
+    if (this.isSavingEdit()) return;
+    this.videoToEdit.set(null);
+    this.editError.set(null);
+  }
+
+  async handleEditSubmit(event: Event): Promise<void> {
+    event.preventDefault();
+    const video = this.videoToEdit();
+    if (!video) return;
+
+    if (!this.editTitle.trim()) {
+      this.editError.set('Title cannot be empty.');
+      return;
+    }
+
+    this.isSavingEdit.set(true);
+    this.editError.set(null);
+
+    try {
+      const updatedData = {
+        title: this.editTitle.trim(),
+        description: this.editDescription.trim(),
+        catigory: this.editCategory.toLowerCase(),
+        visibility: this.editVisibility.toLowerCase(),
+      };
+
+      await this.pbService.updateVideo(video.id, updatedData);
+
+      // If active video is open, update its title/cat/vis/desc
+      if (this.activeVideo()?.id === video.id) {
+        const cur = this.activeVideo()!;
+        this.activeVideo.set({
+          ...cur,
+          title: updatedData.title,
+          description: updatedData.description,
+          catigory: updatedData.catigory,
+          categoryDisplay: this.formatGameName(updatedData.catigory),
+          visibility: updatedData.visibility,
+        });
+      }
+
+      await this.loadVideos();
+      this.videoToEdit.set(null);
+    } catch (err: any) {
+      this.editError.set(err?.message || 'Failed to update video. Please try again.');
+    } finally {
+      this.isSavingEdit.set(false);
     }
   }
 
