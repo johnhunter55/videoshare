@@ -1,10 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { RecordModel } from 'pocketbase';
-import { PocketBaseService, VideoRecord } from '../services/pocketbase.service';
+import {
+  CommentRecord,
+  PocketBaseService,
+  VideoRecord,
+} from '../services/pocketbase.service';
 import { UploadService } from '../services/upload.service';
+import { ChatService } from '../services/chat.service';
 
 export interface DisplayVideo {
   id: string;
@@ -24,15 +29,25 @@ export interface DisplayVideo {
   rawRecord: VideoRecord;
 }
 
+export interface DisplayComment {
+  id: string;
+  content: string;
+  timeAgo: string;
+  userId: string;
+  userName: string;
+  canDelete: boolean;
+}
+
 @Component({
   selector: 'app-home',
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home implements OnInit {
+export class Home implements OnInit, OnDestroy {
   protected readonly pbService = inject(PocketBaseService);
   protected readonly uploadService = inject(UploadService);
+  protected readonly chatService = inject(ChatService);
   private readonly router = inject(Router);
 
   // Video and User Accounts State
@@ -76,6 +91,17 @@ export class Home implements OnInit {
 
   // Active Video Player Modal
   activeVideo = signal<DisplayVideo | null>(null);
+
+  // Comments State (for Player Modal)
+  comments = signal<DisplayComment[]>([]);
+  isLoadingComments = signal(false);
+  newCommentText = '';
+  isSubmittingComment = signal(false);
+  commentError = signal<string | null>(null);
+  private unsubscribeComments?: () => void;
+
+  // Copied Share Link Toast
+  copiedToast = signal(false);
 
   // Combined, filtered, and sorted videos
   filteredVideos = computed(() => {
@@ -206,8 +232,10 @@ export class Home implements OnInit {
     try {
       const users = await this.pbService.getUsers();
       this.usersList.set(users);
-    } catch (err) {
-      console.warn('Could not load users list:', err);
+    } catch (err: any) {
+      if (!err?.isAbort) {
+        console.warn('Could not load users list:', err);
+      }
       this.usersList.set([]);
     }
   }
@@ -396,12 +424,144 @@ export class Home implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    if (this.unsubscribeComments) {
+      this.unsubscribeComments();
+    }
+  }
+
   openPlayer(video: DisplayVideo): void {
     this.activeVideo.set(video);
+    // Asynchronously increment views
+    this.pbService.incrementViews(video.id);
+    // Load live comments
+    this.loadComments(video.id);
   }
 
   closePlayer(): void {
     this.activeVideo.set(null);
+    if (this.unsubscribeComments) {
+      this.unsubscribeComments();
+    }
+  }
+
+  copyShareLink(video: DisplayVideo, event?: Event): void {
+    event?.stopPropagation();
+    const url = `${window.location.origin}/watch/${video.id}`;
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        this.copiedToast.set(true);
+        setTimeout(() => this.copiedToast.set(false), 3000);
+      })
+      .catch(() => {
+        prompt('Copy video link:', url);
+      });
+  }
+
+  downloadVideo(video: DisplayVideo, event?: Event): void {
+    event?.stopPropagation();
+    if (!video.videoUrl) return;
+
+    const link = document.createElement('a');
+    link.href = video.videoUrl;
+    link.download = `${video.title.replace(/[^a-z0-9_-]/gi, '_')}.mp4`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  // --- Comments Logic for Modal Player ---
+
+  async loadComments(videoId: string): Promise<void> {
+    this.isLoadingComments.set(true);
+    this.commentError.set(null);
+
+    if (this.unsubscribeComments) {
+      this.unsubscribeComments();
+    }
+
+    try {
+      const rawComments = await this.pbService.getComments(videoId);
+      this.mapAndSetComments(rawComments);
+
+      this.unsubscribeComments = this.pbService.subscribeComments(
+        videoId,
+        async (action) => {
+          if (action === 'create' || action === 'delete') {
+            const refreshed = await this.pbService.getComments(videoId);
+            this.mapAndSetComments(refreshed);
+          }
+        },
+      );
+    } catch {
+      this.comments.set([]);
+    } finally {
+      this.isLoadingComments.set(false);
+    }
+  }
+
+  private mapAndSetComments(list: CommentRecord[]): void {
+    const currentUserId = this.pbService.currentUser()?.id;
+    const mapped: DisplayComment[] = list.map((c) => {
+      const user = c.expand?.relation2 || c.expand?.user;
+      const userName = user?.['name'] || user?.['email'] || 'Player';
+      const userId = (c.relation2 || c.user || '') as string;
+      return {
+        id: c.id,
+        content: (c.text || c.content || '') as string,
+        timeAgo: this.formatDate(c['created']),
+        userId,
+        userName,
+        canDelete: !!currentUserId && userId === currentUserId,
+      };
+    });
+    this.comments.set(mapped);
+  }
+
+  async handleAddComment(): Promise<void> {
+    const text = this.newCommentText.trim();
+    const vid = this.activeVideo();
+    if (!text || !vid) return;
+
+    if (!this.pbService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.isSubmittingComment.set(true);
+    this.commentError.set(null);
+
+    try {
+      await this.pbService.addComment(vid.id, text);
+      this.newCommentText = '';
+      const refreshed = await this.pbService.getComments(vid.id);
+      this.mapAndSetComments(refreshed);
+    } catch (err: any) {
+      this.commentError.set(err?.message || 'Could not post comment.');
+    } finally {
+      this.isSubmittingComment.set(false);
+    }
+  }
+
+  async handleDeleteComment(commentId: string): Promise<void> {
+    try {
+      await this.pbService.deleteComment(commentId);
+      const vid = this.activeVideo();
+      if (vid) {
+        const refreshed = await this.pbService.getComments(vid.id);
+        this.mapAndSetComments(refreshed);
+      }
+    } catch (err: any) {
+      console.error('Failed to delete comment:', err);
+    }
+  }
+
+  // --- Direct Messages (DMs) Handlers ---
+
+  openChat(userId: string, userName: string, event?: Event): void {
+    event?.stopPropagation();
+    this.chatService.openDrawer({ id: userId, name: userName });
   }
 
   handleLogout(): void {

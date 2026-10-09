@@ -1,0 +1,340 @@
+<!-- Floating DM Launcher (when drawer is closed and logged in) -->
+@if (!chatService.isOpen() && pbService.currentUser()) {
+  <button
+    type="button"
+    (click)="chatService.openDrawer()"
+    title="Open Direct Messages"
+    class="fixed bottom-5 right-5 z-40 p-3.5 rounded-full bg-zinc-900 hover:bg-zinc-800 text-white shadow-xl hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center group border border-zinc-700/80"
+  >
+    <svg class="w-5 h-5 text-zinc-300 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+    </svg>
+    @if (chatService.unreadCount() > 0) {
+      <span class="absolute -top-1 -right-1 px-1.5 py-0.5 rounded-full bg-red-600 text-white text-[10px] font-bold border border-zinc-950 shadow-sm animate-pulse">
+        {{ chatService.unreadCount() }}
+      </span>
+    }
+  </button>
+}
+
+<!-- Direct Messages Floating Window / Drawer -->
+@if (chatService.isOpen()) {
+  <div class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-80 sm:w-96 h-[500px] max-h-[85vh] bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+
+    <!-- Top Drawer Header -->
+    <div class="h-14 px-3.5 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between shrink-0">
+      <!-- Left side header info -->
+      <div class="flex items-center gap-2.5 min-w-0">
+        @if (chatService.activePartner()) {
+          <!-- Back button to return to conversations inbox -->
+          <button
+            type="button"
+            (click)="chatService.backToConversations()"
+            title="Back to conversations"
+            class="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition cursor-pointer shrink-0"
+          >
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <div class="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-white text-xs font-bold shrink-0">
+            {{ chatService.activePartner()?.name?.charAt(0)?.toUpperCase() || 'U' }}
+          </div>
+
+          <div class="min-w-0">
+            <h4 class="text-xs font-semibold text-white truncate max-w-36 sm:max-w-44 leading-tight">
+              {{ chatService.activePartner()?.name }}
+            </h4>
+            <div class="flex items-center gap-1.5 mt-0.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              <span class="text-[10px] text-zinc-400">Online</span>
+            </div>
+          </div>
+        } @else {
+          <!-- Inbox Title -->
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-200">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+            </div>
+            <h3 class="text-xs font-bold text-white">Direct Messages</h3>
+            @if (chatService.unreadCount() > 0) {
+              <span class="px-2 py-0.5 rounded-full bg-red-600 text-white text-[10px] font-bold">
+                {{ chatService.unreadCount() }}
+              </span>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Right side actions -->
+      <div class="flex items-center gap-1 shrink-0">
+        @if (!chatService.activePartner() && !chatService.isUserSearchOpen()) {
+          <button
+            type="button"
+            (click)="chatService.startNewChat()"
+            title="Start new chat"
+            class="p-1.5 rounded-lg text-zinc-300 hover:text-white hover:bg-zinc-800 transition cursor-pointer flex items-center gap-1 text-[11px] font-medium"
+          >
+            <svg class="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            <span class="hidden sm:inline">New Chat</span>
+          </button>
+        }
+
+        <button
+          type="button"
+          (click)="chatService.closeDrawer()"
+          title="Close chat"
+          class="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition cursor-pointer"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 min-h-0 flex flex-col bg-zinc-950/80">
+
+      <!-- VIEW 1: USER SEARCH / NEW CHAT MODE -->
+      @if (chatService.isUserSearchOpen()) {
+        <div class="p-3 border-b border-zinc-800 bg-zinc-900/60 flex items-center gap-2">
+          <div class="relative flex-1">
+            <svg class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              type="text"
+              [ngModel]="chatService.userSearchQuery()"
+              (ngModelChange)="chatService.userSearchQuery.set($event)"
+              placeholder="Search by name or email..."
+              class="w-full pl-8 pr-3 py-1.5 rounded-xl bg-zinc-950 border border-zinc-800 text-white placeholder-zinc-500 text-xs focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500"
+              autofocus
+            />
+          </div>
+          <button
+            type="button"
+            (click)="chatService.cancelNewChat()"
+            class="text-xs text-zinc-400 hover:text-white px-2 py-1 rounded cursor-pointer"
+          >
+            Cancel
+          </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-2 space-y-1">
+          <p class="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider px-2 py-1">Community Members</p>
+          @if (chatService.filteredUsers().length === 0) {
+            <div class="text-center py-8 text-zinc-500 text-xs">
+              No users found matching "{{ chatService.userSearchQuery() }}"
+            </div>
+          } @else {
+            @for (user of chatService.filteredUsers(); track user.id) {
+              <button
+                type="button"
+                (click)="onSelectUser(user)"
+                class="w-full p-2 rounded-xl hover:bg-zinc-800/80 border border-transparent hover:border-zinc-700/60 transition flex items-center justify-between gap-2.5 text-left cursor-pointer group"
+              >
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                    {{ (user['name'] || user['email'] || 'U').charAt(0).toUpperCase() }}
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-xs font-medium text-zinc-200 group-hover:text-white transition truncate">
+                      {{ user['name'] || user['username'] || 'Player' }}
+                    </p>
+                    <p class="text-[10px] text-zinc-400 truncate">
+                      {{ user['email'] || 'Videoshare User' }}
+                    </p>
+                  </div>
+                </div>
+                <span class="text-[10px] px-2.5 py-1 rounded-full bg-zinc-800 group-hover:bg-zinc-700 text-zinc-300 font-medium transition shrink-0">
+                  Chat
+                </span>
+              </button>
+            }
+          }
+        </div>
+
+      <!-- VIEW 2: ACTIVE 1-ON-1 CHAT THREAD -->
+      } @else if (chatService.activePartner()) {
+        <!-- Messages Stream -->
+        <div
+          #messagesContainer
+          class="flex-1 overflow-y-auto p-3.5 space-y-3 scroll-smooth"
+        >
+          @if (chatService.isLoadingMessages()) {
+            <div class="flex items-center justify-center h-full">
+              <div class="flex items-center gap-2 text-xs text-zinc-400">
+                <svg class="animate-spin h-4 w-4 text-zinc-400" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                </svg>
+                <span>Loading messages...</span>
+              </div>
+            </div>
+          } @else if (chatService.messages().length === 0) {
+            <div class="flex flex-col items-center justify-center h-full text-center px-4 py-8">
+              <div class="w-10 h-10 rounded-2xl bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-300 mb-2">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+              </div>
+              <p class="text-xs font-semibold text-zinc-200">No messages yet</p>
+              <p class="text-[11px] text-zinc-400 mt-1">
+                Say hello to {{ chatService.activePartner()?.name }}! Start the conversation.
+              </p>
+            </div>
+          } @else {
+            @for (msg of chatService.messages(); track msg.id) {
+              <div
+                class="flex flex-col"
+                [class.items-end]="msg.isMe"
+                [class.items-start]="!msg.isMe"
+              >
+                <div
+                  class="px-3.5 py-2 rounded-2xl max-w-[82%] break-words text-xs leading-relaxed"
+                  [class.bg-red-600]="msg.isMe"
+                  [class.text-white]="msg.isMe"
+                  [class.rounded-br-xs]="msg.isMe"
+                  [class.bg-zinc-800]="!msg.isMe"
+                  [class.border]="!msg.isMe"
+                  [class.border-zinc-700/60]="!msg.isMe"
+                  [class.text-zinc-200]="!msg.isMe"
+                  [class.rounded-bl-xs]="!msg.isMe"
+                >
+                  {{ msg.content }}
+                </div>
+                <div class="flex items-center gap-1.5 mt-1 px-1">
+                  <span class="text-[9px] text-zinc-500">{{ msg.formattedTime || msg.timeAgo }}</span>
+                  @if (msg.isMe) {
+                    <span class="text-[9px] text-zinc-400" [title]="msg.read ? 'Read' : 'Delivered'">
+                      {{ msg.read ? '✓✓' : '✓' }}
+                    </span>
+                  }
+                </div>
+              </div>
+            }
+          }
+        </div>
+
+        @if (chatService.error()) {
+          <div class="px-3 py-1 bg-red-950/60 border-t border-red-900 text-red-300 text-[11px] flex items-center justify-between">
+            <span>{{ chatService.error() }}</span>
+            <button (click)="chatService.error.set(null)" class="text-xs cursor-pointer">✕</button>
+          </div>
+        }
+
+        <!-- Message Input Bar -->
+        <div class="p-2.5 bg-zinc-950 border-t border-zinc-800 flex items-center gap-2 shrink-0">
+          <input
+            type="text"
+            [(ngModel)]="newMessageText"
+            (keydown)="onInputKeyDown($event)"
+            placeholder="Type a message... (Enter to send)"
+            class="flex-1 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white placeholder-zinc-500 text-xs focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500"
+            [disabled]="chatService.isSending()"
+          />
+          <button
+            type="button"
+            (click)="handleSendMessage()"
+            [disabled]="!newMessageText.trim() || chatService.isSending()"
+            class="p-2 rounded-xl bg-red-600 hover:bg-red-500 text-white cursor-pointer disabled:opacity-40 shadow-xs transition shrink-0"
+            title="Send"
+          >
+            @if (chatService.isSending()) {
+              <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+              </svg>
+            } @else {
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+            }
+          </button>
+        </div>
+
+      <!-- VIEW 3: CONVERSATIONS LIST (INBOX MODE) -->
+      } @else {
+        <div class="flex-1 overflow-y-auto p-2">
+          @if (chatService.isLoadingConversations()) {
+            <div class="flex items-center justify-center h-full">
+              <div class="flex items-center gap-2 text-xs text-zinc-400">
+                <svg class="animate-spin h-4 w-4 text-zinc-400" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                </svg>
+                <span>Loading conversations...</span>
+              </div>
+            </div>
+          } @else if (chatService.conversations().length === 0) {
+            <div class="flex flex-col items-center justify-center h-full text-center px-4 py-8">
+              <div class="w-12 h-12 rounded-2xl bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-300 mb-3 shadow-xs">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+              </div>
+              <h4 class="text-xs font-bold text-white">No Conversations Yet</h4>
+              <p class="text-[11px] text-zinc-400 mt-1 max-w-56 leading-normal">
+                Direct message video creators or start a new conversation with anyone!
+              </p>
+              <button
+                type="button"
+                (click)="chatService.startNewChat()"
+                class="mt-4 px-3.5 py-1.5 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs font-semibold shadow-xs cursor-pointer transition flex items-center gap-1.5"
+              >
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                <span>Start New Chat</span>
+              </button>
+            </div>
+          } @else {
+            <div class="space-y-1">
+              @for (thread of chatService.conversations(); track thread.partnerId) {
+                <button
+                  type="button"
+                  (click)="onSelectConversation(thread)"
+                  class="w-full p-2.5 rounded-xl hover:bg-zinc-800/80 border border-transparent hover:border-zinc-700/60 transition flex items-center justify-between gap-3 text-left cursor-pointer group"
+                >
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                      {{ thread.partnerName.charAt(0).toUpperCase() }}
+                    </div>
+                    <div class="min-w-0">
+                      <div class="flex items-center gap-1.5">
+                        <span class="text-xs font-medium text-zinc-200 group-hover:text-white transition truncate">
+                          {{ thread.partnerName }}
+                        </span>
+                        @if (thread.unreadCount > 0) {
+                          <span class="w-2 h-2 rounded-full bg-red-500 shrink-0"></span>
+                        }
+                      </div>
+                      <p class="text-[11px] text-zinc-400 truncate max-w-44 mt-0.5" [class.font-semibold]="thread.unreadCount > 0" [class.text-zinc-200]="thread.unreadCount > 0">
+                        {{ thread.lastMessage }}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col items-end gap-1 shrink-0">
+                    <span class="text-[10px] text-zinc-500">{{ thread.timeAgo }}</span>
+                    @if (thread.unreadCount > 0) {
+                      <span class="px-1.5 py-0.2 rounded-full bg-red-600 text-white text-[9px] font-bold">
+                        {{ thread.unreadCount }}
+                      </span>
+                    }
+                  </div>
+                </button>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+}

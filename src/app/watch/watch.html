@@ -1,0 +1,518 @@
+<div class="min-h-screen bg-zinc-950 text-white flex flex-col font-sans">
+  <!-- Top Navbar -->
+  <header class="bg-zinc-950/80 border-b border-zinc-800/80 sticky top-0 z-40 backdrop-blur-md px-4 sm:px-6 py-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      <!-- Logo -->
+      <a routerLink="/home" class="flex items-center gap-2.5 group cursor-pointer shrink-0">
+        <div class="w-9 h-9 rounded-xl bg-red-600 flex items-center justify-center text-white font-bold shadow-md shadow-red-600/20 group-hover:scale-105 transition">
+          <svg class="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </div>
+        <span class="text-lg font-bold tracking-tight text-white">
+          Video<span class="text-zinc-400">Share</span>
+        </span>
+      </a>
+
+      <!-- Navigation & Auth Links -->
+      <div class="flex items-center gap-3">
+        <a
+          routerLink="/home"
+          class="px-3.5 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-medium text-zinc-300 hover:text-white transition flex items-center gap-1.5 cursor-pointer shadow-xs"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span class="hidden sm:inline">Back to Feed</span>
+        </a>
+
+        @if (pbService.currentUser()) {
+          <button
+            type="button"
+            (click)="chatService.toggleDrawer()"
+            title="Direct Messages"
+            class="relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-medium text-zinc-300 hover:text-white transition cursor-pointer shadow-xs"
+          >
+            <svg class="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            <span class="hidden sm:inline">Messages</span>
+            @if (chatService.unreadCount() > 0) {
+              <span class="px-1.5 py-0.5 rounded-full bg-red-600 text-white text-[10px] font-black leading-none">
+                {{ chatService.unreadCount() }}
+              </span>
+            }
+          </button>
+
+          <div class="flex items-center gap-2 pl-2 border-l border-zinc-800">
+            <div class="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-white text-xs font-bold shadow-xs">
+              {{ (pbService.currentUser()?.['name'] || pbService.currentUser()?.['email'] || 'U').charAt(0).toUpperCase() }}
+            </div>
+            <span class="text-xs font-medium text-zinc-300 hidden md:inline truncate max-w-28">
+              {{ pbService.currentUser()?.['name'] || pbService.currentUser()?.['email'] }}
+            </span>
+          </div>
+        } @else {
+          <a
+            routerLink="/login"
+            class="px-4 py-1.5 rounded-xl bg-white hover:bg-zinc-200 text-zinc-950 text-xs font-semibold shadow-xs transition cursor-pointer"
+          >
+            Sign In
+          </a>
+        }
+      </div>
+    </div>
+  </header>
+
+  <!-- Copied Toast Banner -->
+  @if (copiedToast()) {
+    <div class="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-zinc-900 border border-zinc-700 text-zinc-100 px-4 py-2 rounded-full font-medium text-xs shadow-2xl flex items-center gap-2 animate-bounce">
+      <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+      <span>Share link copied to clipboard!</span>
+    </div>
+  }
+
+  <!-- Main Content Layout -->
+  <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-6">
+    <!-- Loading State -->
+    @if (isLoading()) {
+      <div class="max-w-4xl mx-auto space-y-4 animate-pulse">
+        <div class="aspect-video bg-zinc-900/80 rounded-2xl"></div>
+        <div class="h-6 bg-zinc-900/80 rounded w-2/3"></div>
+        <div class="h-4 bg-zinc-900/80 rounded w-1/3"></div>
+      </div>
+    } @else if (errorMessage()) {
+      <!-- Error State -->
+      <div class="max-w-lg mx-auto py-24 text-center space-y-4">
+        <div class="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center mx-auto">
+          <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+        </div>
+        <h2 class="text-xl font-bold text-white">Video Unavailable</h2>
+        <p class="text-sm text-zinc-400 leading-relaxed">{{ errorMessage() }}</p>
+        <a
+          routerLink="/home"
+          class="inline-block mt-2 px-5 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-semibold transition border border-zinc-700/60"
+        >
+          Explore Other Videos
+        </a>
+      </div>
+    } @else if (video()) {
+      <!-- Video Watch Layout (Left: Video & Details, Right: Suggested Clips) -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left: Main Player & Info -->
+        <div class="lg:col-span-2 space-y-5">
+          <!-- Video Player Container -->
+          <div class="aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl relative border border-zinc-800">
+            @if (video()!.videoUrl) {
+              <video
+                [src]="video()!.videoUrl"
+                controls
+                autoplay
+                playsinline
+                class="w-full h-full object-contain"
+              ></video>
+            } @else {
+              <div class="w-full h-full flex flex-col items-center justify-center text-zinc-400 p-6 text-center">
+                <p class="text-sm font-medium">No playable video stream found.</p>
+              </div>
+            }
+          </div>
+
+          <!-- Video Title & Meta Bar -->
+          <div class="space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+              <div class="min-w-0 flex-1">
+                <h1 class="text-xl sm:text-2xl font-bold text-white leading-tight">
+                  {{ video()!.title }}
+                </h1>
+                <div class="flex items-center gap-2 mt-2 text-xs text-zinc-400">
+                  <span class="font-medium px-2.5 py-0.5 rounded-md bg-zinc-800 text-zinc-300 border border-zinc-700/50 text-[11px]">
+                    {{ video()!.categoryDisplay }}
+                  </span>
+                  <span>•</span>
+                  <span>{{ video()!.views }} views</span>
+                  <span>•</span>
+                  <span>{{ video()!.timeAgo }}</span>
+                  @if (video()!.visibility === 'private') {
+                    <span class="px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 font-medium border border-zinc-700">
+                      🔒 Private
+                    </span>
+                  } @else if (video()!.visibility === 'unlisted') {
+                    <span class="px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 font-medium border border-zinc-700">
+                      🔗 Unlisted
+                    </span>
+                  }
+                </div>
+              </div>
+
+              <!-- Action Buttons (Share, Download, Edit, Delete) -->
+              <div class="flex items-center gap-2 shrink-0 flex-wrap">
+                <!-- Share / Copy Link -->
+                <button
+                  type="button"
+                  (click)="copyShareLink()"
+                  class="px-3.5 py-2 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-medium transition cursor-pointer flex items-center gap-1.5"
+                  title="Copy share link"
+                >
+                  <svg class="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                  </svg>
+                  <span>Share</span>
+                </button>
+
+                <!-- Download Clip -->
+                <button
+                  type="button"
+                  (click)="downloadVideo()"
+                  class="px-3.5 py-2 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-medium transition cursor-pointer flex items-center gap-1.5"
+                  title="Download MP4 video clip"
+                >
+                  <svg class="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  <span>Download</span>
+                </button>
+
+                <!-- Owner Actions: Edit & Delete -->
+                @if (video()!.creatorId === pbService.currentUser()?.id) {
+                  <button
+                    type="button"
+                    (click)="openEdit()"
+                    class="px-3.5 py-2 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-medium transition cursor-pointer flex items-center gap-1.5"
+                  >
+                    <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                    <span>Edit</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="promptDelete()"
+                    class="px-3.5 py-2 rounded-full bg-zinc-800 hover:bg-red-950 hover:text-red-300 text-zinc-400 text-xs font-medium transition cursor-pointer flex items-center gap-1.5"
+                  >
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    <span>Delete</span>
+                  </button>
+                }
+              </div>
+            </div>
+
+            <!-- Creator Channel Box -->
+            <div class="flex items-center justify-between p-4 rounded-2xl bg-zinc-900 border border-zinc-800">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-white font-bold text-sm">
+                  {{ video()!.creatorName.charAt(0).toUpperCase() }}
+                </div>
+                <div>
+                  <h3 class="text-sm font-semibold text-white">{{ video()!.creatorName }}</h3>
+                  <p class="text-xs text-zinc-400">Content Creator</p>
+                </div>
+              </div>
+
+              <!-- Message Creator Button (DMs) -->
+              @if (pbService.currentUser() && video()!.creatorId !== pbService.currentUser()?.id) {
+                <button
+                  type="button"
+                  (click)="openChat()"
+                  class="px-4 py-2 rounded-full bg-white hover:bg-zinc-200 text-zinc-950 text-xs font-semibold transition cursor-pointer flex items-center gap-1.5"
+                >
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                  <span>Message</span>
+                </button>
+              }
+            </div>
+
+            <!-- Description -->
+            @if (video()!.description) {
+              <div class="p-4 rounded-2xl bg-zinc-900 border border-zinc-800/80 text-sm text-zinc-300 leading-relaxed whitespace-pre-line">
+                {{ video()!.description }}
+              </div>
+            }
+          </div>
+
+          <!-- Comments Section -->
+          <div class="space-y-4 pt-4 border-t border-zinc-800">
+            <div class="flex items-center justify-between">
+              <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <span>Comments</span>
+                <span class="text-xs px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-300 font-mono">
+                  {{ comments().length }}
+                </span>
+              </h3>
+            </div>
+
+            <!-- Comment Input (if logged in) -->
+            @if (pbService.isLoggedIn()) {
+              <div class="flex items-start gap-3 bg-zinc-900 p-4 rounded-2xl border border-zinc-800">
+                <div class="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                  {{ (pbService.currentUser()?.['name'] || pbService.currentUser()?.['email'] || 'U').charAt(0).toUpperCase() }}
+                </div>
+                <div class="flex-1 space-y-2">
+                  <textarea
+                    rows="2"
+                    [(ngModel)]="newCommentText"
+                    placeholder="Share your thoughts on this play..."
+                    class="w-full px-3 py-2 rounded-xl bg-zinc-950 border border-zinc-800 text-white placeholder-zinc-500 text-xs focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 resize-none transition"
+                  ></textarea>
+
+                  @if (commentError()) {
+                    <p class="text-xs text-red-400">{{ commentError() }}</p>
+                  }
+
+                  <div class="flex justify-end">
+                    <button
+                      type="button"
+                      (click)="handleAddComment()"
+                      [disabled]="!newCommentText.trim() || isSubmittingComment()"
+                      class="px-4 py-1.5 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs font-medium transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5"
+                    >
+                      @if (isSubmittingComment()) {
+                        <svg class="animate-spin w-3 h-3" fill="none" viewBox="0 0 24 24">
+                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                        </svg>
+                        <span>Posting...</span>
+                      } @else {
+                        <span>Comment</span>
+                      }
+                    </button>
+                  </div>
+                </div>
+              </div>
+            } @else {
+              <!-- Guest CTA to Login -->
+              <div class="p-4 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-between text-xs text-zinc-300">
+                <span>Want to join the conversation?</span>
+                <a
+                  routerLink="/login"
+                  class="px-3.5 py-1.5 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-medium transition cursor-pointer"
+                >
+                  Sign In to Comment
+                </a>
+              </div>
+            }
+
+            <!-- Comments List -->
+            @if (isLoadingComments()) {
+              <div class="space-y-3 py-4 animate-pulse">
+                <div class="h-10 bg-zinc-900/60 rounded-xl"></div>
+                <div class="h-10 bg-zinc-900/60 rounded-xl"></div>
+              </div>
+            } @else if (comments().length === 0) {
+              <div class="py-8 text-center text-zinc-500 text-xs">
+                No comments yet. Be the first to share your reaction!
+              </div>
+            } @else {
+              <div class="space-y-3">
+                @for (c of comments(); track c.id) {
+                  <div class="p-3.5 rounded-2xl bg-zinc-900/50 border border-zinc-800/80 flex items-start justify-between gap-3 group hover:border-zinc-700/60 transition">
+                    <div class="flex items-start gap-2.5 min-w-0">
+                      <div class="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-white text-[10px] font-bold shrink-0 mt-0.5">
+                        {{ c.userName.charAt(0).toUpperCase() }}
+                      </div>
+                      <div class="min-w-0 space-y-1">
+                        <div class="flex items-center gap-2">
+                          <span class="text-xs font-medium text-zinc-200">{{ c.userName }}</span>
+                          <span class="text-[10px] text-zinc-500">{{ c.timeAgo }}</span>
+                        </div>
+                        <p class="text-xs text-zinc-300 leading-relaxed whitespace-pre-line">{{ c.content }}</p>
+                      </div>
+                    </div>
+
+                    @if (c.canDelete) {
+                      <button
+                        type="button"
+                        (click)="handleDeleteComment(c.id)"
+                        title="Delete comment"
+                        class="text-zinc-600 hover:text-red-400 p-1 rounded transition opacity-0 group-hover:opacity-100 cursor-pointer"
+                      >
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Right: Suggested Clips Sidebar -->
+        <div class="space-y-4">
+          <h3 class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+            More Highlights
+          </h3>
+
+          <div class="space-y-3">
+            @for (sug of suggestedVideos(); track sug.id) {
+              <a
+                [routerLink]="['/watch', sug.id]"
+                class="flex gap-3 p-2 rounded-xl bg-zinc-900/40 hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-700 transition group cursor-pointer"
+              >
+                <!-- Thumbnail preview -->
+                <div class="w-28 sm:w-32 aspect-video bg-zinc-950 rounded-lg overflow-hidden shrink-0 relative">
+                  @if (sug.thumbnailUrl) {
+                    <img [src]="sug.thumbnailUrl" class="w-full h-full object-cover group-hover:scale-105 transition" />
+                  } @else if (sug.videoUrl) {
+                    <video [src]="sug.videoUrl + '#t=0.5'" preload="metadata" muted playsinline class="w-full h-full object-cover group-hover:scale-105 transition pointer-events-none"></video>
+                  } @else {
+                    <div class="w-full h-full flex items-center justify-center text-zinc-400 font-bold text-xs">
+                      ▶
+                    </div>
+                  }
+                  <span class="absolute bottom-1 right-1 px-1.5 py-0.5 rounded text-[9px] font-medium bg-black/80 text-zinc-300">
+                    {{ sug.categoryDisplay }}
+                  </span>
+                </div>
+
+                <!-- Meta -->
+                <div class="min-w-0 flex-1">
+                  <h4 class="text-xs font-medium text-zinc-100 line-clamp-2 leading-snug group-hover:text-white transition">
+                    {{ sug.title }}
+                  </h4>
+                  <p class="text-[11px] text-zinc-400 truncate mt-1">{{ sug.creatorName }}</p>
+                  <p class="text-[10px] text-zinc-500 mt-0.5">{{ sug.views }} views • {{ sug.timeAgo }}</p>
+                </div>
+              </a>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </main>
+
+  <!-- Edit Modal -->
+  @if (isEditing()) {
+    <div class="fixed inset-0 z-60 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" (click)="closeEdit()">
+      <div class="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-lg shadow-2xl p-6 relative max-h-[95vh] overflow-y-auto" (click)="$event.stopPropagation()">
+        <h3 class="text-lg font-bold text-white mb-4">Edit Video</h3>
+
+        @if (editError()) {
+          <div class="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 text-xs">
+            {{ editError() }}
+          </div>
+        }
+
+        <form (submit)="handleSaveEdit($event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-medium text-zinc-300 mb-1.5" for="edit-watch-title">Title</label>
+            <input
+              id="edit-watch-title"
+              type="text"
+              required
+              [(ngModel)]="editTitle"
+              name="editTitle"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-white text-sm focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500"
+            />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-zinc-300 mb-1.5" for="edit-watch-cat">Category</label>
+              <select
+                id="edit-watch-cat"
+                [(ngModel)]="editCategory"
+                name="editCategory"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-white text-sm"
+              >
+                <option value="league of legends">League of Legends</option>
+                <option value="valorant">Valorant</option>
+                <option value="minecraft">Minecraft</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-zinc-300 mb-1.5" for="edit-watch-vis">Visibility</label>
+              <select
+                id="edit-watch-vis"
+                [(ngModel)]="editVisibility"
+                name="editVisibility"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-white text-sm"
+              >
+                <option value="public">Public</option>
+                <option value="unlisted">Unlisted</option>
+                <option value="private">Private</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-zinc-300 mb-1.5" for="edit-watch-desc">Description</label>
+            <textarea
+              id="edit-watch-desc"
+              rows="3"
+              [(ngModel)]="editDescription"
+              name="editDescription"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-white text-sm resize-none"
+            ></textarea>
+          </div>
+
+          <div class="flex items-center justify-end gap-3 pt-3 border-t border-zinc-800">
+            <button
+              type="button"
+              (click)="closeEdit()"
+              [disabled]="isSavingEdit()"
+              class="px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              [disabled]="isSavingEdit()"
+              class="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-semibold transition cursor-pointer"
+            >
+              {{ isSavingEdit() ? 'Saving...' : 'Save Changes' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+  <!-- Delete Modal -->
+  @if (isDeletingConfirm()) {
+    <div class="fixed inset-0 z-60 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" (click)="cancelDelete()">
+      <div class="bg-zinc-900 border border-red-900/60 rounded-2xl w-full max-w-md shadow-2xl p-6 relative" (click)="$event.stopPropagation()">
+        <h3 class="text-lg font-bold text-white">Delete Video</h3>
+        <p class="text-xs text-zinc-400 mt-2">
+          Are you sure you want to permanently delete "{{ video()?.title }}"? This cannot be undone.
+        </p>
+
+        @if (deleteError()) {
+          <div class="mt-3 p-3 rounded-xl bg-red-500/15 border border-red-500/20 text-red-300 text-xs">
+            {{ deleteError() }}
+          </div>
+        }
+
+        <div class="mt-6 flex items-center justify-end gap-3">
+          <button
+            type="button"
+            (click)="cancelDelete()"
+            [disabled]="isDeleting()"
+            class="px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            (click)="confirmDelete()"
+            [disabled]="isDeleting()"
+            class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-semibold cursor-pointer"
+          >
+            {{ isDeleting() ? 'Deleting...' : 'Delete Permanently' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

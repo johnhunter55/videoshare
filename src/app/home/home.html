@@ -1,35 +1,20 @@
-<div class="min-h-screen bg-mist-950 text-slate-100 flex flex-col">
+<div class="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans">
   <!-- Top Navigation Bar -->
   <header
-    class="sticky top-0 z-40 bg-mauve-900/90 backdrop-blur-md border-b border-amber-800/30 px-4 sm:px-6 py-3"
+    class="sticky top-0 z-40 bg-zinc-950/90 backdrop-blur-md border-b border-zinc-800/80 px-4 sm:px-6 py-3"
   >
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
       <!-- Logo & Brand -->
       <a routerLink="/home" class="flex items-center gap-2.5 shrink-0 group cursor-pointer">
         <div
-          class="w-10 h-10 rounded-xl bg-linear-to-tr from-mauve-500 to-amber-600 flex items-center justify-center text-white shadow-md shadow-mauve-500/20 group-hover:scale-105 transition"
+          class="w-9 h-9 rounded-xl bg-red-600 flex items-center justify-center text-white shadow-md shadow-red-600/20 group-hover:scale-105 transition"
         >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-            />
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
+          <svg class="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z" />
           </svg>
         </div>
-        <span class="text-xl font-bold tracking-tight text-white hidden sm:inline"
-          >Video<span class="text-amber-500">Share</span></span
+        <span class="text-lg font-bold tracking-tight text-white hidden sm:inline"
+          >Video<span class="text-zinc-400">Share</span></span
         >
       </a>
 
@@ -37,7 +22,7 @@
       <div class="flex-1 max-w-xl mx-2 sm:mx-6">
         <div class="relative">
           <div
-            class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400"
+            class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-500"
           >
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
@@ -53,12 +38,12 @@
             [ngModel]="searchQuery()"
             (ngModelChange)="searchQuery.set($event)"
             placeholder="Search clips, creators, or games..."
-            class="w-full pl-10 pr-9 py-2 rounded-xl bg-mauve-950 border border-mauve-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50 focus:border-transparent transition"
+            class="w-full pl-10 pr-9 py-2 rounded-full bg-zinc-900 border border-zinc-800 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-600 focus:ring-1 focus:ring-zinc-600 transition"
           />
           @if (searchQuery()) {
             <button
               (click)="searchQuery.set('')"
-              class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white cursor-pointer"
+              class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-zinc-400 hover:text-white cursor-pointer"
             >
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
@@ -81,10 +66,10 @@
             type="button"
             (click)="uploadService.isMinimized.set(false)"
             title="Click to view upload progress"
-            class="flex items-center gap-2 py-1.5 px-3 rounded-xl bg-mauve-800/90 border border-amber-500/50 text-amber-300 text-xs font-semibold cursor-pointer shadow-sm hover:border-amber-400 transition animate-pulse"
+            class="flex items-center gap-2 py-1.5 px-3 rounded-full bg-zinc-900 border border-zinc-700 text-zinc-200 text-xs font-semibold cursor-pointer shadow-xs hover:border-zinc-500 transition animate-pulse"
           >
             <svg
-              class="animate-spin h-3.5 w-3.5 text-amber-400 shrink-0"
+              class="animate-spin h-3.5 w-3.5 text-red-500 shrink-0"
               fill="none"
               viewBox="0 0 24 24"
             >
@@ -109,7 +94,7 @@
         <!-- Upload Button -->
         <button
           (click)="openUploadModal()"
-          class="flex items-center gap-2 py-2 px-3.5 rounded-xl bg-linear-to-tr from-mauve-500 to-amber-600 hover:from-mauve-600 hover:to-amber-700 text-white text-sm font-medium shadow-md shadow-mauve-500/20 transition cursor-pointer"
+          class="flex items-center gap-2 py-1.5 px-3.5 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs font-semibold shadow-xs transition cursor-pointer"
         >
           <svg
             class="w-4 h-4"
@@ -120,15 +105,33 @@
           >
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
           </svg>
-          <span class="hidden md:inline">Upload Clip</span>
+          <span class="hidden md:inline">Upload</span>
+        </button>
+
+        <!-- Messages Button with Unread Badge -->
+        <button
+          type="button"
+          (click)="chatService.toggleDrawer()"
+          title="Direct Messages"
+          class="relative flex items-center gap-2 py-1.5 px-3 rounded-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white text-xs font-medium transition cursor-pointer shadow-xs"
+        >
+          <svg class="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+          <span class="hidden sm:inline">Messages</span>
+          @if (chatService.unreadCount() > 0) {
+            <span class="px-1.5 py-0.5 rounded-full bg-red-600 text-white text-[10px] font-bold leading-none">
+              {{ chatService.unreadCount() }}
+            </span>
+          }
         </button>
 
         <!-- User Chip & Sign Out -->
         <div
-          class="flex items-center gap-2 bg-mauve-800/80 border border-mauve-700/60 rounded-xl px-2.5 py-1.5"
+          class="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-full px-2.5 py-1"
         >
           <div
-            class="w-7 h-7 rounded-lg bg-linear-to-tr from-mauve-500 to-amber-600 flex items-center justify-center text-white text-xs font-bold shrink-0"
+            class="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-white text-xs font-bold shrink-0"
           >
             {{
               (pbService.currentUser()?.['name'] || pbService.currentUser()?.['email'])
@@ -136,14 +139,14 @@
                 ?.toUpperCase() || 'U'
             }}
           </div>
-          <span class="text-xs font-medium text-slate-200 hidden lg:inline max-w-30 truncate">
+          <span class="text-xs font-medium text-zinc-300 hidden lg:inline max-w-28 truncate">
             {{ pbService.currentUser()?.['name'] || pbService.currentUser()?.['email'] }}
           </span>
 
           <button
             (click)="handleLogout()"
             title="Sign Out"
-            class="text-slate-400 hover:text-amber-400 transition p-1 rounded-md cursor-pointer ml-1"
+            class="text-zinc-500 hover:text-red-400 transition p-1 rounded-md cursor-pointer ml-1"
           >
             <svg
               class="w-4 h-4"
@@ -164,26 +167,24 @@
     </div>
   </header>
 
-  <!-- Game Filters & User Sorting Controls Bar -->
-  <div class="bg-mauve-950/80 border-b border-mauve-800/60 px-4 sm:px-6 py-2.5">
+  <!-- Game Filters & User Sorting Controls Bar (YouTube-style Clean Horizontal Chips) -->
+  <div class="bg-zinc-950/80 border-b border-zinc-800/80 px-4 sm:px-6 py-2.5 backdrop-blur-sm">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
-      <!-- Game Filter Pills (League of Legends, Valorant, Minecraft) -->
+      <!-- Category Filter Chips -->
       <div class="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1 md:pb-0">
         @for (cat of categories; track cat) {
           <button
             type="button"
             (click)="setCategory(cat)"
-            [class.bg-linear-to-tr]="selectedCategory() === cat"
-            [class.from-mauve-500]="selectedCategory() === cat"
-            [class.to-amber-600]="selectedCategory() === cat"
-            [class.text-white]="selectedCategory() === cat"
-            [class.border-amber-500/50]="selectedCategory() === cat"
-            [class.shadow-sm]="selectedCategory() === cat"
-            [class.shadow-mauve-500/20]="selectedCategory() === cat"
-            [class.bg-mauve-900]="selectedCategory() !== cat"
-            [class.text-mauve-400]="selectedCategory() !== cat"
-            [class.border-mauve-800]="selectedCategory() !== cat"
-            class="px-3.5 py-1.5 rounded-lg text-xs font-medium border hover:border-amber-600/50 hover:text-white transition cursor-pointer whitespace-nowrap"
+            [class.bg-white]="selectedCategory() === cat"
+            [class.text-zinc-950]="selectedCategory() === cat"
+            [class.font-semibold]="selectedCategory() === cat"
+            [class.border-white]="selectedCategory() === cat"
+            [class.shadow-xs]="selectedCategory() === cat"
+            [class.bg-zinc-900]="selectedCategory() !== cat"
+            [class.text-zinc-300]="selectedCategory() !== cat"
+            [class.border-zinc-800]="selectedCategory() !== cat"
+            class="px-3.5 py-1.5 rounded-lg text-xs font-medium border hover:border-zinc-700 hover:text-white transition cursor-pointer whitespace-nowrap"
           >
             {{ cat }}
           </button>
@@ -193,13 +194,13 @@
       <!-- User Accounts Filter & Sorting Dropdowns -->
       <div class="flex items-center gap-3 shrink-0 self-end md:self-auto">
         <!-- Filter By Creator / User Account -->
-        <div class="flex items-center gap-1.5 text-xs text-slate-400">
+        <div class="flex items-center gap-1.5 text-xs text-zinc-400">
           <label for="creator-select" class="hidden sm:inline">Creator:</label>
           <select
             id="creator-select"
             [ngModel]="selectedUserFilter()"
             (ngModelChange)="setUserFilter($event)"
-            class="bg-mauve-900 border border-mauve-800 text-white rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-amber-500/50 cursor-pointer max-w-42.5 truncate"
+            class="bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-zinc-600 cursor-pointer max-w-44 truncate"
           >
             <option value="all">👥 All Creators</option>
             @if (pbService.currentUser()) {
@@ -220,13 +221,13 @@
         </div>
 
         <!-- Sort By -->
-        <div class="flex items-center gap-1.5 text-xs text-slate-400">
+        <div class="flex items-center gap-1.5 text-xs text-zinc-400">
           <label for="sort-select" class="hidden sm:inline">Sort:</label>
           <select
             id="sort-select"
             [ngModel]="sortBy()"
             (ngModelChange)="setSortBy($event)"
-            class="bg-mauve-900 border border-mauve-800 text-white rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-amber-500/50 cursor-pointer"
+            class="bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-zinc-600 cursor-pointer"
           >
             <option value="newest">🕒 Newest</option>
             <option value="oldest">⏳ Oldest</option>
@@ -242,23 +243,23 @@
     <!-- Active Creator Filter Banner -->
     @if (selectedUserFilter() !== 'all') {
       <div
-        class="mb-5 flex items-center justify-between bg-mauve-900/60 border border-amber-800/30 rounded-xl px-4 py-2.5 text-xs"
+        class="mb-5 flex items-center justify-between bg-zinc-900/60 border border-zinc-800 rounded-xl px-4 py-2.5 text-xs"
       >
         <div class="flex items-center gap-2">
-          <span class="text-slate-400">Showing videos from:</span>
-          <span class="text-amber-400 font-semibold">
+          <span class="text-zinc-400">Showing videos from:</span>
+          <span class="text-white font-semibold">
             {{
               selectedUserObject()?.['name'] ||
                 selectedUserObject()?.['email'] ||
                 (selectedUserFilter() === 'me' ? 'My Videos' : 'Selected User')
             }}
           </span>
-          <span class="text-slate-500">({{ filteredVideos().length }} videos)</span>
+          <span class="text-zinc-500">({{ filteredVideos().length }} videos)</span>
         </div>
         <button
           type="button"
           (click)="clearUserFilter()"
-          class="text-amber-500 hover:text-amber-400 transition font-medium cursor-pointer underline"
+          class="text-zinc-300 hover:text-white transition font-medium cursor-pointer underline"
         >
           Show All Creators
         </button>
@@ -270,12 +271,12 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
           <div class="animate-pulse space-y-3">
-            <div class="aspect-video bg-mauve-900/60 rounded-xl"></div>
+            <div class="aspect-video bg-zinc-900/80 rounded-xl"></div>
             <div class="flex gap-3">
-              <div class="w-9 h-9 rounded-full bg-mauve-900/60 shrink-0"></div>
+              <div class="w-9 h-9 rounded-full bg-zinc-900/80 shrink-0"></div>
               <div class="flex-1 space-y-2 py-1">
-                <div class="h-3.5 bg-mauve-900/60 rounded w-5/6"></div>
-                <div class="h-2.5 bg-mauve-900/60 rounded w-1/2"></div>
+                <div class="h-3.5 bg-zinc-900/80 rounded w-5/6"></div>
+                <div class="h-2.5 bg-zinc-900/80 rounded w-1/2"></div>
               </div>
             </div>
           </div>
@@ -283,9 +284,9 @@
       </div>
     } @else if (videos().length === 0) {
       <!-- 0 Videos in Database -->
-      <div class="py-20 text-center">
+      <div class="py-24 text-center">
         <div
-          class="w-16 h-16 rounded-2xl bg-mauve-900 border border-amber-800/30 flex items-center justify-center mx-auto mb-4 text-amber-500"
+          class="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mx-auto mb-4 text-zinc-400"
         >
           <svg
             class="w-8 h-8"
@@ -302,22 +303,21 @@
           </svg>
         </div>
         <h3 class="text-lg font-semibold text-white">No videos uploaded yet</h3>
-        <p class="text-sm text-slate-400 mt-1.5 max-w-md mx-auto">
-          Be the first creator to share a clip! Upload a League of Legends, Valorant, or Minecraft
-          gameplay highlight.
+        <p class="text-sm text-zinc-400 mt-1.5 max-w-md mx-auto">
+          Be the first creator to share a clip! Upload a gameplay highlight or gaming moment.
         </p>
         <button
           (click)="openUploadModal()"
-          class="mt-5 px-5 py-2.5 rounded-xl bg-linear-to-tr from-mauve-500 to-amber-600 hover:from-mauve-600 hover:to-amber-700 text-white text-sm font-medium transition cursor-pointer shadow-md shadow-mauve-500/20"
+          class="mt-5 px-5 py-2.5 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs font-semibold transition cursor-pointer shadow-xs"
         >
           Upload Your First Video
         </button>
       </div>
     } @else if (filteredVideos().length === 0) {
       <!-- 0 Videos matching current search/filter -->
-      <div class="py-20 text-center">
+      <div class="py-24 text-center">
         <div
-          class="w-16 h-16 rounded-2xl bg-mauve-900 border border-amber-800/30 flex items-center justify-center mx-auto mb-4 text-amber-500"
+          class="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mx-auto mb-4 text-zinc-400"
         >
           <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
@@ -329,104 +329,92 @@
           </svg>
         </div>
         <h3 class="text-lg font-semibold text-white">No matching videos</h3>
-        <p class="text-sm text-slate-400 mt-1 max-w-sm mx-auto">
-          No videos found for your current game or creator filter.
+        <p class="text-sm text-zinc-400 mt-1 max-w-sm mx-auto">
+          No clips found matching your active search or filter.
         </p>
         <button
           (click)="searchQuery.set(''); setCategory('All'); clearUserFilter()"
-          class="mt-4 px-4 py-2 rounded-xl bg-mauve-800 hover:bg-mauve-700 text-sm font-medium text-white transition cursor-pointer"
+          class="mt-4 px-4 py-2 rounded-full bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-white transition cursor-pointer"
         >
           Reset All Filters
         </button>
       </div>
     } @else {
-      <!-- Real Videos Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <!-- Real Videos Grid (YouTube / Clean Twitch Style) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-7">
         @for (video of filteredVideos(); track video.id) {
           <div
             (click)="openPlayer(video)"
-            class="group cursor-pointer flex flex-col bg-mauve-900/70 border border-amber-800/30 rounded-2xl overflow-hidden hover:border-amber-600/50 hover:shadow-xl hover:shadow-amber-500/5 transition duration-200"
+            class="group cursor-pointer flex flex-col"
           >
-            <!-- Video Thumbnail / Gameplay Preview Container -->
-            <div class="aspect-video relative bg-mauve-950 overflow-hidden">
+            <!-- Thumbnail preview -->
+            <div class="aspect-video relative bg-zinc-900 rounded-xl overflow-hidden border border-zinc-800/80">
               @if (video.thumbnailUrl) {
                 <img
                   [src]="video.thumbnailUrl"
                   [alt]="video.title"
-                  class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                  class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-200"
                   loading="lazy"
                 />
               } @else if (video.videoUrl) {
-                <!-- Real video frame preview using #t=0.5 with preload metadata -->
                 <video
                   [src]="video.videoUrl + '#t=0.5'"
                   preload="metadata"
                   muted
                   playsinline
-                  class="w-full h-full object-cover group-hover:scale-105 transition duration-300 pointer-events-none"
+                  class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-200 pointer-events-none"
                 ></video>
               } @else {
-                <!-- Game-specific styled preview canvas fallback -->
                 <div
-                  class="w-full h-full bg-linear-to-br from-mauve-950 via-mauve-900 to-amber-950/40 flex flex-col items-center justify-center p-4 text-center"
+                  class="w-full h-full bg-zinc-900 flex flex-col items-center justify-center p-4 text-center"
                 >
-                  <div
-                    class="w-12 h-12 rounded-2xl bg-amber-600/20 text-amber-400 flex items-center justify-center mb-2 shadow-inner"
-                  >
-                    <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                  <div class="w-10 h-10 rounded-full bg-zinc-800 text-zinc-300 flex items-center justify-center mb-1">
+                    <svg class="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24">
                       <path d="M8 5v14l11-7z" />
                     </svg>
                   </div>
-                  <span class="text-[11px] font-semibold text-amber-400 uppercase tracking-wider">{{
-                    video.categoryDisplay
-                  }}</span>
+                  <span class="text-[11px] font-medium text-zinc-400">{{ video.categoryDisplay }}</span>
                 </div>
               }
 
-              <!-- Game Category Badge (overlay) -->
+              <!-- Game Category Badge (subtle clean dark pill) -->
               <span
-                class="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/80 text-[10px] font-semibold text-amber-300 backdrop-blur-xs border border-amber-500/20"
+                class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/75 backdrop-blur-xs text-[10px] font-medium text-zinc-300 border border-zinc-700/50"
               >
                 {{ video.categoryDisplay }}
+              </span>
+
+              <!-- Duration badge in bottom right (like YouTube) -->
+              <span
+                class="absolute bottom-2 right-2 px-1.5 py-0.5 rounded bg-black/80 text-[10px] font-medium text-zinc-200"
+              >
+                {{ video.duration || 'Clip' }}
               </span>
 
               <!-- Visibility Badge (if unlisted or private) -->
               @if (video.visibility === 'private') {
                 <span
-                  class="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-rose-950/80 text-[10px] font-medium text-rose-300 border border-rose-500/30"
+                  class="absolute top-2 right-2 px-2 py-0.5 rounded bg-zinc-900/90 text-[10px] font-medium text-zinc-300 border border-zinc-700"
                 >
                   🔒 Private
                 </span>
               } @else if (video.visibility === 'unlisted') {
                 <span
-                  class="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-slate-900/80 text-[10px] font-medium text-slate-300 border border-slate-700"
+                  class="absolute top-2 right-2 px-2 py-0.5 rounded bg-zinc-900/90 text-[10px] font-medium text-zinc-300 border border-zinc-700"
                 >
                   🔗 Unlisted
                 </span>
               }
-
-              <!-- Hover Play Overlay -->
-              <div
-                class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center"
-              >
-                <div
-                  class="w-12 h-12 rounded-full bg-linear-to-tr from-mauve-500 to-amber-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition shadow-mauve-500/30"
-                >
-                  <svg class="w-6 h-6 fill-current ml-0.5" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
-              </div>
             </div>
 
-            <!-- Card Metadata -->
-            <div class="p-4 flex gap-3">
-              <!-- Creator Avatar (Clicking filters to that creator) -->
+            <!-- Card Metadata (Standard Ergonomic Video Card Layout) -->
+            <div class="pt-3 flex gap-3">
+              <!-- Creator Avatar -->
               <button
                 type="button"
                 (click)="$event.stopPropagation(); setUserFilter(video.creatorId)"
                 [title]="'Filter by ' + video.creatorName"
-                class="w-9 h-9 rounded-full bg-linear-to-tr from-mauve-500 to-amber-600 flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-sm hover:scale-105 transition cursor-pointer"
+                class="w-9 h-9 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-white text-xs font-bold shrink-0 hover:scale-105 transition cursor-pointer"
               >
                 {{ video.creatorName.charAt(0).toUpperCase() }}
               </button>
@@ -435,18 +423,31 @@
               <div class="flex-1 min-w-0">
                 <div class="flex items-start justify-between gap-1">
                   <h4
-                    class="text-sm font-semibold text-white line-clamp-2 leading-snug group-hover:text-amber-400 transition"
+                    class="text-sm font-medium text-zinc-100 line-clamp-2 leading-snug group-hover:text-white transition"
                   >
                     {{ video.title }}
                   </h4>
-                  <!-- Owner actions (Edit & Delete) -->
-                  @if (video.creatorId === pbService.currentUser()?.id) {
-                    <div class="flex items-center gap-0.5 shrink-0">
+
+                  <div class="flex items-center gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition">
+                    <!-- Share Button -->
+                    <button
+                      type="button"
+                      (click)="copyShareLink(video, $event)"
+                      title="Copy share link"
+                      class="text-zinc-400 hover:text-white p-1 rounded transition cursor-pointer"
+                    >
+                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                      </svg>
+                    </button>
+
+                    <!-- Owner actions (Edit & Delete) -->
+                    @if (video.creatorId === pbService.currentUser()?.id) {
                       <button
                         type="button"
                         (click)="openEditModal(video, $event)"
                         title="Edit video"
-                        class="text-slate-500 hover:text-amber-400 p-1 rounded-md transition cursor-pointer"
+                        class="text-zinc-400 hover:text-white p-1 rounded transition cursor-pointer"
                       >
                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -456,7 +457,7 @@
                         type="button"
                         (click)="promptDeleteVideo(video, $event)"
                         title="Delete video"
-                        class="text-slate-500 hover:text-rose-400 p-1 rounded-md transition cursor-pointer"
+                        class="text-zinc-400 hover:text-red-400 p-1 rounded transition cursor-pointer"
                       >
                         <svg
                           class="w-3.5 h-3.5"
@@ -472,18 +473,34 @@
                           />
                         </svg>
                       </button>
-                    </div>
-                  }
+                    }
+                  </div>
                 </div>
 
-                <button
-                  type="button"
-                  (click)="$event.stopPropagation(); setUserFilter(video.creatorId)"
-                  class="text-xs text-slate-400 mt-1 truncate hover:text-amber-400 transition cursor-pointer text-left block"
-                >
-                  {{ video.creatorName }}
-                </button>
-                <div class="flex items-center gap-1.5 text-xs text-slate-500 mt-0.5">
+                <div class="flex items-center justify-between gap-1 mt-1">
+                  <button
+                    type="button"
+                    (click)="$event.stopPropagation(); setUserFilter(video.creatorId)"
+                    class="text-xs text-zinc-400 truncate hover:text-zinc-200 transition cursor-pointer text-left block"
+                  >
+                    {{ video.creatorName }}
+                  </button>
+                  @if (pbService.currentUser() && video.creatorId !== pbService.currentUser()?.id) {
+                    <button
+                      type="button"
+                      (click)="openChat(video.creatorId, video.creatorName, $event)"
+                      title="Send message"
+                      class="text-zinc-500 hover:text-zinc-200 p-0.5 rounded transition cursor-pointer shrink-0"
+                    >
+                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      </svg>
+                    </button>
+                  }
+                </div>
+                <div class="flex items-center gap-1.5 text-xs text-zinc-500 mt-0.5">
+                  <span>{{ video.views }} views</span>
+                  <span>•</span>
                   <span>{{ video.timeAgo }}</span>
                 </div>
               </div>
@@ -501,29 +518,29 @@
       (click)="closePlayer()"
     >
       <div
-        class="bg-mauve-900 border border-amber-800/40 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl p-4 sm:p-6"
+        class="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl p-4 sm:p-6"
         (click)="$event.stopPropagation()"
       >
         <!-- Header -->
-        <div class="flex items-center justify-between pb-3 border-b border-mauve-800 mb-4">
+        <div class="flex items-center justify-between pb-3 border-b border-zinc-800 mb-4">
           <div class="flex items-center gap-2">
             <span
-              class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30"
+              class="px-2.5 py-0.5 rounded-md text-xs font-medium bg-zinc-800 text-zinc-300 border border-zinc-700"
             >
               {{ activeVideo()!.categoryDisplay }}
             </span>
             @if (activeVideo()!.visibility !== 'public') {
               <span
-                class="px-2 py-0.5 rounded-full text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 capitalize"
+                class="px-2 py-0.5 rounded-md text-xs font-medium bg-zinc-800 text-zinc-400 border border-zinc-700 capitalize"
               >
                 {{ activeVideo()!.visibility }}
               </span>
             }
-            <span class="text-xs text-slate-400">{{ activeVideo()!.timeAgo }}</span>
+            <span class="text-xs text-zinc-400">{{ activeVideo()!.timeAgo }}</span>
           </div>
           <button
             (click)="closePlayer()"
-            class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-mauve-800 transition cursor-pointer"
+            class="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition cursor-pointer"
           >
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
@@ -538,7 +555,7 @@
 
         <!-- Video Player -->
         <div
-          class="aspect-video bg-black rounded-xl overflow-hidden mb-4 relative flex items-center justify-center"
+          class="aspect-video bg-black rounded-xl overflow-hidden mb-4 relative flex items-center justify-center border border-zinc-800"
         >
           @if (activeVideo()!.videoUrl) {
             <video
@@ -550,14 +567,14 @@
           } @else {
             <div class="text-center p-6 space-y-3">
               <div
-                class="w-16 h-16 rounded-full bg-amber-600/20 text-amber-400 flex items-center justify-center mx-auto"
+                class="w-14 h-14 rounded-full bg-zinc-800 text-zinc-300 flex items-center justify-center mx-auto"
               >
-                <svg class="w-8 h-8 fill-current ml-1" viewBox="0 0 24 24">
+                <svg class="w-7 h-7 fill-current ml-0.5" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z" />
                 </svg>
               </div>
-              <h3 class="text-lg font-medium text-white">{{ activeVideo()!.title }}</h3>
-              <p class="text-xs text-slate-400 max-w-md mx-auto">
+              <h3 class="text-base font-medium text-white">{{ activeVideo()!.title }}</h3>
+              <p class="text-xs text-zinc-400 max-w-md mx-auto">
                 No streamable video file URL found for this record.
               </p>
             </div>
@@ -566,16 +583,58 @@
 
         <!-- Details -->
         <div class="space-y-3">
-          <div class="flex items-start justify-between gap-4">
+          <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
             <h2 class="text-xl font-bold text-white">{{ activeVideo()!.title }}</h2>
-            @if (activeVideo()!.creatorId === pbService.currentUser()?.id) {
-              <div class="flex items-center gap-2 shrink-0">
+
+            <!-- Action Bar (Share, Download, Full Page, Edit, Delete) -->
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <!-- Share -->
+              <button
+                type="button"
+                (click)="copyShareLink(activeVideo()!, $event)"
+                class="px-3.5 py-1.5 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-medium transition cursor-pointer flex items-center gap-1.5"
+                title="Copy share link"
+              >
+                <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                </svg>
+                <span>Share</span>
+              </button>
+
+              <!-- Download -->
+              <button
+                type="button"
+                (click)="downloadVideo(activeVideo()!, $event)"
+                class="px-3.5 py-1.5 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-medium transition cursor-pointer flex items-center gap-1.5"
+                title="Download video"
+              >
+                <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                <span>Download</span>
+              </button>
+
+              <!-- Standalone Watch Page -->
+              <a
+                [routerLink]="['/watch', activeVideo()!.id]"
+                (click)="closePlayer()"
+                class="px-3.5 py-1.5 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-medium transition cursor-pointer flex items-center gap-1.5"
+                title="Open standalone watch page"
+              >
+                <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                <span>Full Page</span>
+              </a>
+
+              <!-- Owner Actions: Edit & Delete -->
+              @if (activeVideo()!.creatorId === pbService.currentUser()?.id) {
                 <button
                   type="button"
                   (click)="openEditModal(activeVideo()!, $event)"
-                  class="px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-medium transition cursor-pointer flex items-center gap-1.5 shrink-0"
+                  class="px-3.5 py-1.5 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-medium transition cursor-pointer flex items-center gap-1.5"
                 >
-                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -583,12 +642,12 @@
                       d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
                     />
                   </svg>
-                  Edit Video
+                  <span>Edit</span>
                 </button>
                 <button
                   type="button"
                   (click)="promptDeleteVideo(activeVideo()!, $event)"
-                  class="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-medium transition cursor-pointer flex items-center gap-1.5 shrink-0"
+                  class="px-3.5 py-1.5 rounded-full bg-zinc-800 hover:bg-red-950 hover:text-red-300 text-zinc-400 text-xs font-medium transition cursor-pointer flex items-center gap-1.5"
                 >
                   <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
@@ -598,37 +657,134 @@
                       d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                     />
                   </svg>
-                  Delete Video
+                  <span>Delete</span>
                 </button>
+              }
+            </div>
+          </div>
+
+          <!-- Channel Info & Message Creator -->
+          <div class="flex items-center justify-between p-3.5 rounded-xl bg-zinc-950 border border-zinc-800">
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                (click)="closePlayer(); setUserFilter(activeVideo()!.creatorId)"
+                class="w-10 h-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-white font-bold text-xs cursor-pointer hover:scale-105 transition"
+              >
+                {{ activeVideo()!.creatorName.charAt(0).toUpperCase() }}
+              </button>
+              <div>
+                <p
+                  class="text-xs font-semibold text-white cursor-pointer hover:text-zinc-300 transition"
+                  (click)="closePlayer(); setUserFilter(activeVideo()!.creatorId)"
+                >
+                  {{ activeVideo()!.creatorName }}
+                </p>
+                <p class="text-[11px] text-zinc-400">Content Creator</p>
               </div>
+            </div>
+
+            <!-- Message Creator (DM) -->
+            @if (pbService.currentUser() && activeVideo()!.creatorId !== pbService.currentUser()?.id) {
+              <button
+                type="button"
+                (click)="openChat(activeVideo()!.creatorId, activeVideo()!.creatorName, $event)"
+                class="px-4 py-1.5 rounded-full bg-white hover:bg-zinc-200 text-zinc-950 text-xs font-semibold transition cursor-pointer flex items-center gap-1.5"
+              >
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                <span>Message</span>
+              </button>
             }
           </div>
 
-          <div class="flex items-center gap-3">
-            <button
-              type="button"
-              (click)="closePlayer(); setUserFilter(activeVideo()!.creatorId)"
-              class="w-10 h-10 rounded-full bg-linear-to-tr from-mauve-500 to-amber-600 flex items-center justify-center text-white font-bold cursor-pointer hover:scale-105 transition"
-            >
-              {{ activeVideo()!.creatorName.charAt(0).toUpperCase() }}
-            </button>
-            <div>
-              <p
-                class="text-sm font-semibold text-white cursor-pointer hover:text-amber-400 transition"
-                (click)="closePlayer(); setUserFilter(activeVideo()!.creatorId)"
-              >
-                {{ activeVideo()!.creatorName }}
-              </p>
-              <p class="text-xs text-slate-400">Creator Account</p>
-            </div>
-          </div>
           @if (activeVideo()!.description) {
             <div
-              class="bg-mauve-950 p-4 rounded-xl border border-mauve-800 text-sm text-slate-300 leading-relaxed whitespace-pre-line"
+              class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800 text-xs text-zinc-300 leading-relaxed whitespace-pre-line"
             >
               {{ activeVideo()!.description }}
             </div>
           }
+
+          <!-- Comments Section inside Player Modal -->
+          <div class="space-y-3 pt-3 border-t border-zinc-800">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <span>Comments</span>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-300 font-mono">
+                {{ comments().length }}
+              </span>
+            </h3>
+
+            <!-- Comment Input -->
+            @if (pbService.isLoggedIn()) {
+              <div class="flex items-start gap-2.5 bg-zinc-950 p-3 rounded-xl border border-zinc-800">
+                <div class="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-white text-[11px] font-bold shrink-0">
+                  {{ (pbService.currentUser()?.['name'] || pbService.currentUser()?.['email'] || 'U').charAt(0).toUpperCase() }}
+                </div>
+                <div class="flex-1 space-y-2">
+                  <textarea
+                    rows="2"
+                    [(ngModel)]="newCommentText"
+                    placeholder="Write a comment..."
+                    class="w-full px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-white placeholder-zinc-500 text-xs focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 resize-none"
+                  ></textarea>
+                  @if (commentError()) {
+                    <p class="text-[11px] text-red-400">{{ commentError() }}</p>
+                  }
+                  <div class="flex justify-end">
+                    <button
+                      type="button"
+                      (click)="handleAddComment()"
+                      [disabled]="!newCommentText.trim() || isSubmittingComment()"
+                      class="px-4 py-1.5 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs font-semibold disabled:opacity-40 cursor-pointer"
+                    >
+                      {{ isSubmittingComment() ? 'Posting...' : 'Comment' }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <!-- Comments List -->
+            @if (isLoadingComments()) {
+              <div class="space-y-2 py-2 animate-pulse">
+                <div class="h-8 bg-zinc-900/60 rounded-lg"></div>
+              </div>
+            } @else if (comments().length === 0) {
+              <p class="text-xs text-zinc-500 py-3 text-center">No comments yet. Be the first to comment!</p>
+            } @else {
+              <div class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                @for (c of comments(); track c.id) {
+                  <div class="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-800/80 flex items-start justify-between gap-2 group">
+                    <div class="flex items-start gap-2 min-w-0">
+                      <div class="w-6 h-6 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-white text-[10px] font-bold shrink-0 mt-0.5">
+                        {{ c.userName.charAt(0).toUpperCase() }}
+                      </div>
+                      <div class="min-w-0">
+                        <div class="flex items-center gap-1.5">
+                          <span class="text-xs font-medium text-zinc-200">{{ c.userName }}</span>
+                          <span class="text-[10px] text-zinc-500">{{ c.timeAgo }}</span>
+                        </div>
+                        <p class="text-xs text-zinc-300 leading-snug mt-0.5">{{ c.content }}</p>
+                      </div>
+                    </div>
+                    @if (c.canDelete) {
+                      <button
+                        type="button"
+                        (click)="handleDeleteComment(c.id)"
+                        class="text-zinc-600 hover:text-red-400 p-0.5 rounded opacity-0 group-hover:opacity-100 transition cursor-pointer"
+                      >
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
         </div>
       </div>
     </div>
@@ -641,14 +797,14 @@
       (click)="closeUploadModal()"
     >
       <div
-        class="bg-mauve-900 border border-amber-800/40 rounded-2xl w-full max-w-lg shadow-2xl p-6 relative max-h-[95vh] overflow-y-auto"
+        class="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-lg shadow-2xl p-6 relative max-h-[95vh] overflow-y-auto"
         (click)="$event.stopPropagation()"
       >
         <!-- Header -->
-        <div class="flex items-center justify-between pb-4 border-b border-mauve-800 mb-5">
-          <div class="flex items-center gap-2">
+        <div class="flex items-center justify-between pb-4 border-b border-zinc-800 mb-5">
+          <div class="flex items-center gap-2.5">
             <div
-              class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center"
+              class="w-9 h-9 rounded-xl bg-red-600/15 text-red-500 flex items-center justify-center"
             >
               <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
@@ -660,15 +816,15 @@
               </svg>
             </div>
             <div>
-              <h3 class="text-lg font-semibold text-white">Upload Game Clip</h3>
-              <p class="text-[11px] text-slate-400">
-                Uploads run in the background so you can keep browsing!
+              <h3 class="text-base font-semibold text-white">Upload Game Clip</h3>
+              <p class="text-[11px] text-zinc-400">
+                Uploads run in the background so you can keep browsing.
               </p>
             </div>
           </div>
           <button
             (click)="closeUploadModal()"
-            class="text-slate-400 hover:text-white transition p-1 rounded-lg hover:bg-mauve-800 cursor-pointer"
+            class="text-zinc-400 hover:text-white transition p-1.5 rounded-lg hover:bg-zinc-800 cursor-pointer"
           >
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
@@ -684,10 +840,10 @@
         <!-- Alert Error -->
         @if (uploadError()) {
           <div
-            class="mb-4 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-start gap-2.5"
+            class="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 text-xs flex items-start gap-2.5"
           >
             <svg
-              class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"
+              class="w-4 h-4 text-red-400 shrink-0 mt-0.5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -707,8 +863,8 @@
         <form (submit)="handleUploadSubmit($event)" class="space-y-4">
           <!-- Title -->
           <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1.5" for="upload-title">
-              Video Title <span class="text-rose-400">*</span>
+            <label class="block text-xs font-medium text-zinc-300 mb-1.5" for="upload-title">
+              Video Title <span class="text-red-400">*</span>
             </label>
             <input
               id="upload-title"
@@ -717,21 +873,21 @@
               [(ngModel)]="uploadTitle"
               name="uploadTitle"
               placeholder="e.g. Insane 1v5 Pentakill"
-              class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 text-sm"
             />
           </div>
 
           <!-- Category (catigory in PocketBase) & Visibility Row -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-medium text-slate-300 mb-1.5" for="upload-category">
-                Game Category <span class="text-rose-400">*</span>
+              <label class="block text-xs font-medium text-zinc-300 mb-1.5" for="upload-category">
+                Game Category <span class="text-red-400">*</span>
               </label>
               <select
                 id="upload-category"
                 [(ngModel)]="uploadCategory"
                 name="uploadCategory"
-                class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-white focus:outline-none focus:border-zinc-500 text-sm"
               >
                 <option value="league of legends">League of Legends</option>
                 <option value="valorant">Valorant</option>
@@ -742,16 +898,16 @@
 
             <div>
               <label
-                class="block text-xs font-medium text-slate-300 mb-1.5"
+                class="block text-xs font-medium text-zinc-300 mb-1.5"
                 for="upload-visibility"
               >
-                Visibility <span class="text-rose-400">*</span>
+                Visibility <span class="text-red-400">*</span>
               </label>
               <select
                 id="upload-visibility"
                 [(ngModel)]="uploadVisibility"
                 name="uploadVisibility"
-                class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-white focus:outline-none focus:border-zinc-500 text-sm"
               >
                 <option value="public">Public (Everyone)</option>
                 <option value="unlisted">Unlisted (Anyone with link)</option>
@@ -762,7 +918,7 @@
 
           <!-- Description -->
           <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1.5" for="upload-desc">
+            <label class="block text-xs font-medium text-zinc-300 mb-1.5" for="upload-desc">
               Description
             </label>
             <textarea
@@ -771,17 +927,17 @@
               [(ngModel)]="uploadDescription"
               name="uploadDescription"
               placeholder="Tell viewers about your play or moment..."
-              class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm resize-none"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 text-sm resize-none"
             ></textarea>
           </div>
 
           <!-- Video File (Required by PocketBase schema) -->
           <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1.5" for="video-file">
-              Video File (.mp4, .webm, .mov) <span class="text-rose-400">*</span>
+            <label class="block text-xs font-medium text-zinc-300 mb-1.5" for="video-file">
+              Video File (.mp4, .webm, .mov) <span class="text-red-400">*</span>
             </label>
             <div
-              class="relative border-2 border-dashed border-mauve-800 hover:border-amber-500/50 rounded-xl p-4 transition bg-mauve-950 text-center"
+              class="relative border-2 border-dashed border-zinc-800 hover:border-zinc-600 rounded-xl p-4 transition bg-zinc-950 text-center"
             >
               <input
                 id="video-file"
@@ -793,7 +949,7 @@
               />
               <div class="flex flex-col items-center justify-center gap-1.5 pointer-events-none">
                 <div
-                  class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center"
+                  class="w-8 h-8 rounded-lg bg-zinc-800 text-zinc-300 flex items-center justify-center"
                 >
                   <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
@@ -805,30 +961,30 @@
                   </svg>
                 </div>
                 @if (selectedFileName()) {
-                  <p class="text-xs font-medium text-amber-400">{{ selectedFileName() }}</p>
-                  <p class="text-[11px] text-slate-400">Click to choose a different video</p>
+                  <p class="text-xs font-medium text-white">{{ selectedFileName() }}</p>
+                  <p class="text-[11px] text-zinc-400">Click to choose a different video</p>
                 } @else {
-                  <p class="text-xs text-slate-300 font-medium">
+                  <p class="text-xs text-zinc-300 font-medium">
                     Click to select video or drag & drop
                   </p>
-                  <p class="text-[11px] text-slate-500">MP4, WebM, or MOV</p>
+                  <p class="text-[11px] text-zinc-500">MP4, WebM, or MOV</p>
                 }
               </div>
             </div>
           </div>
 
           <!-- Submit Buttons -->
-          <div class="flex items-center justify-end gap-3 pt-4 border-t border-mauve-800">
+          <div class="flex items-center justify-end gap-3 pt-4 border-t border-zinc-800">
             <button
               type="button"
               (click)="closeUploadModal()"
-              class="px-4 py-2 rounded-xl bg-mauve-800 hover:bg-mauve-700 text-slate-300 text-sm font-medium transition cursor-pointer"
+              class="px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-sm font-medium transition cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              class="px-5 py-2.5 rounded-xl bg-linear-to-tr from-mauve-500 to-amber-600 hover:from-mauve-600 hover:to-amber-700 text-white text-sm font-medium shadow-md shadow-mauve-500/20 transition cursor-pointer flex items-center gap-2"
+              class="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-sm font-semibold transition cursor-pointer flex items-center gap-2"
             >
               <svg
                 class="w-4 h-4"
@@ -858,13 +1014,13 @@
       (click)="cancelDelete()"
     >
       <div
-        class="bg-mauve-900 border border-rose-900/60 rounded-2xl w-full max-w-md shadow-2xl p-6 relative"
+        class="bg-zinc-900 border border-red-900/60 rounded-2xl w-full max-w-md shadow-2xl p-6 relative"
         (click)="$event.stopPropagation()"
       >
         <!-- Icon & Header -->
         <div class="flex items-start gap-4">
           <div
-            class="w-12 h-12 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-400 flex items-center justify-center shrink-0"
+            class="w-12 h-12 rounded-xl bg-red-500/15 border border-red-500/30 text-red-400 flex items-center justify-center shrink-0"
           >
             <svg
               class="w-6 h-6"
@@ -882,7 +1038,7 @@
           </div>
           <div class="flex-1 min-w-0">
             <h3 class="text-lg font-bold text-white">Delete Video</h3>
-            <p class="text-xs text-slate-400 mt-1">
+            <p class="text-xs text-zinc-400 mt-1">
               Are you sure you want to permanently delete this clip? This action cannot be undone.
             </p>
           </div>
@@ -890,16 +1046,16 @@
 
         <!-- Video Info Card -->
         <div
-          class="mt-4 p-3 rounded-xl bg-mauve-950 border border-mauve-800 flex items-center gap-3"
+          class="mt-4 p-3 rounded-xl bg-zinc-950 border border-zinc-800 flex items-center gap-3"
         >
           <div
-            class="w-10 h-10 rounded-lg bg-mauve-900 border border-amber-800/30 flex items-center justify-center text-amber-400 shrink-0 font-bold text-xs"
+            class="w-10 h-10 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-300 shrink-0 font-bold text-xs"
           >
             ▶
           </div>
           <div class="min-w-0 flex-1">
             <p class="text-xs font-semibold text-white truncate">{{ videoToDelete()?.title }}</p>
-            <p class="text-[10px] text-slate-400 uppercase tracking-wider">
+            <p class="text-[10px] text-zinc-400 uppercase tracking-wider">
               {{ videoToDelete()?.categoryDisplay }}
             </p>
           </div>
@@ -908,7 +1064,7 @@
         <!-- Error Message if Delete Fails -->
         @if (deleteError()) {
           <div
-            class="mt-3 p-3 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs"
+            class="mt-3 p-3 rounded-xl bg-red-500/15 border border-red-500/20 text-red-300 text-xs"
           >
             {{ deleteError() }}
           </div>
@@ -920,7 +1076,7 @@
             type="button"
             (click)="cancelDelete()"
             [disabled]="isDeleting()"
-            class="px-4 py-2 rounded-xl bg-mauve-800 hover:bg-mauve-700 text-slate-300 text-xs font-medium transition cursor-pointer disabled:opacity-50"
+            class="px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium transition cursor-pointer disabled:opacity-50"
           >
             Cancel
           </button>
@@ -928,7 +1084,7 @@
             type="button"
             (click)="confirmDelete()"
             [disabled]="isDeleting()"
-            class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-lg shadow-rose-900/40 transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
+            class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-semibold transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
           >
             @if (isDeleting()) {
               <svg class="animate-spin w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
@@ -963,14 +1119,14 @@
       (click)="closeEditModal()"
     >
       <div
-        class="bg-mauve-900 border border-amber-800/40 rounded-2xl w-full max-w-lg shadow-2xl p-6 relative max-h-[95vh] overflow-y-auto"
+        class="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-lg shadow-2xl p-6 relative max-h-[95vh] overflow-y-auto"
         (click)="$event.stopPropagation()"
       >
         <!-- Header -->
-        <div class="flex items-center justify-between pb-4 border-b border-mauve-800 mb-5">
+        <div class="flex items-center justify-between pb-4 border-b border-zinc-800 mb-5">
           <div class="flex items-center gap-2.5">
             <div
-              class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0"
+              class="w-9 h-9 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-200 flex items-center justify-center shrink-0"
             >
               <svg
                 class="w-5 h-5"
@@ -987,15 +1143,15 @@
               </svg>
             </div>
             <div>
-              <h3 class="text-lg font-bold text-white">Edit Video</h3>
-              <p class="text-xs text-slate-400">Update clip title, category, and details</p>
+              <h3 class="text-base font-bold text-white">Edit Video</h3>
+              <p class="text-xs text-zinc-400">Update clip title, category, and details</p>
             </div>
           </div>
           <button
             type="button"
             (click)="closeEditModal()"
             [disabled]="isSavingEdit()"
-            class="text-slate-400 hover:text-white transition p-1.5 rounded-lg hover:bg-mauve-800 cursor-pointer disabled:opacity-50"
+            class="text-zinc-400 hover:text-white transition p-1.5 rounded-lg hover:bg-zinc-800 cursor-pointer disabled:opacity-50"
           >
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
@@ -1011,7 +1167,7 @@
         <!-- Error Alert -->
         @if (editError()) {
           <div
-            class="mb-4 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs"
+            class="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 text-xs"
           >
             {{ editError() }}
           </div>
@@ -1021,8 +1177,8 @@
         <form (submit)="handleEditSubmit($event)" class="space-y-4">
           <!-- Title -->
           <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1.5" for="edit-title">
-              Video Title <span class="text-rose-400">*</span>
+            <label class="block text-xs font-medium text-zinc-300 mb-1.5" for="edit-title">
+              Video Title <span class="text-red-400">*</span>
             </label>
             <input
               id="edit-title"
@@ -1031,21 +1187,21 @@
               [(ngModel)]="editTitle"
               name="editTitle"
               placeholder="e.g. Insane 1v5 Pentakill"
-              class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 text-sm"
             />
           </div>
 
           <!-- Category & Visibility Row -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-medium text-slate-300 mb-1.5" for="edit-category">
-                Game Category <span class="text-rose-400">*</span>
+              <label class="block text-xs font-medium text-zinc-300 mb-1.5" for="edit-category">
+                Game Category <span class="text-red-400">*</span>
               </label>
               <select
                 id="edit-category"
                 [(ngModel)]="editCategory"
                 name="editCategory"
-                class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm cursor-pointer"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-white focus:outline-none focus:border-zinc-500 text-sm cursor-pointer"
               >
                 <option value="league of legends">League of Legends</option>
                 <option value="valorant">Valorant</option>
@@ -1055,14 +1211,14 @@
             </div>
 
             <div>
-              <label class="block text-xs font-medium text-slate-300 mb-1.5" for="edit-visibility">
-                Visibility <span class="text-rose-400">*</span>
+              <label class="block text-xs font-medium text-zinc-300 mb-1.5" for="edit-visibility">
+                Visibility <span class="text-red-400">*</span>
               </label>
               <select
                 id="edit-visibility"
                 [(ngModel)]="editVisibility"
                 name="editVisibility"
-                class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm cursor-pointer"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-white focus:outline-none focus:border-zinc-500 text-sm cursor-pointer"
               >
                 <option value="public">Public (Everyone)</option>
                 <option value="unlisted">Unlisted (Anyone with link)</option>
@@ -1073,7 +1229,7 @@
 
           <!-- Description -->
           <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1.5" for="edit-desc">
+            <label class="block text-xs font-medium text-zinc-300 mb-1.5" for="edit-desc">
               Description
             </label>
             <textarea
@@ -1082,24 +1238,24 @@
               [(ngModel)]="editDescription"
               name="editDescription"
               placeholder="Tell viewers about your play or moment..."
-              class="w-full px-3.5 py-2.5 rounded-xl bg-mauve-950 border border-mauve-800 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50 text-sm resize-none"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 text-sm resize-none"
             ></textarea>
           </div>
 
           <!-- Actions -->
-          <div class="flex items-center justify-end gap-3 pt-4 border-t border-mauve-800">
+          <div class="flex items-center justify-end gap-3 pt-4 border-t border-zinc-800">
             <button
               type="button"
               (click)="closeEditModal()"
               [disabled]="isSavingEdit()"
-              class="px-4 py-2.5 rounded-xl bg-mauve-800 hover:bg-mauve-700 text-slate-300 text-xs font-medium transition cursor-pointer disabled:opacity-50"
+              class="px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium transition cursor-pointer disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               type="submit"
               [disabled]="isSavingEdit()"
-              class="px-5 py-2.5 rounded-xl bg-linear-to-tr from-mauve-500 to-amber-600 hover:from-mauve-600 hover:to-amber-700 text-white text-xs font-semibold shadow-md shadow-mauve-500/20 transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
+              class="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-semibold transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
             >
               @if (isSavingEdit()) {
                 <svg class="animate-spin w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
@@ -1133,10 +1289,10 @@
     @if (!uploadService.isMinimized()) {
       <!-- Expanded Floating Widget -->
       <div
-        class="fixed bottom-5 right-5 z-50 w-80 sm:w-96 bg-mauve-900 border border-amber-800/60 rounded-2xl shadow-2xl p-4 backdrop-blur-md transition-all duration-200"
+        class="fixed bottom-5 right-5 z-50 w-80 sm:w-96 bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl p-4 backdrop-blur-md transition-all duration-200"
       >
         <!-- Widget Header -->
-        <div class="flex items-center justify-between pb-2.5 border-b border-mauve-800/80 mb-3">
+        <div class="flex items-center justify-between pb-2.5 border-b border-zinc-800 mb-3">
           <div class="flex items-center gap-2">
             @if (uploadService.isComplete()) {
               <div
@@ -1155,7 +1311,7 @@
               <span class="text-xs font-bold text-emerald-400">Upload Complete!</span>
             } @else if (uploadService.error()) {
               <div
-                class="w-6 h-6 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center shrink-0"
+                class="w-6 h-6 rounded-lg bg-red-500/20 text-red-400 flex items-center justify-center shrink-0"
               >
                 <svg
                   class="w-4 h-4"
@@ -1171,10 +1327,10 @@
                   />
                 </svg>
               </div>
-              <span class="text-xs font-bold text-rose-400">Upload Error</span>
+              <span class="text-xs font-bold text-red-400">Upload Error</span>
             } @else {
               <div
-                class="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0"
+                class="w-6 h-6 rounded-lg bg-zinc-800 text-zinc-300 flex items-center justify-center shrink-0"
               >
                 <svg class="animate-spin w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
                   <circle
@@ -1192,7 +1348,7 @@
                   ></path>
                 </svg>
               </div>
-              <span class="text-xs font-bold text-amber-400">Uploading in Background</span>
+              <span class="text-xs font-semibold text-zinc-200">Uploading in Background</span>
             }
           </div>
 
@@ -1203,7 +1359,7 @@
                 type="button"
                 (click)="uploadService.toggleMinimize()"
                 title="Minimize widget"
-                class="p-1 rounded-md text-slate-400 hover:text-white hover:bg-mauve-800 transition cursor-pointer"
+                class="p-1 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800 transition cursor-pointer"
               >
                 <svg
                   class="w-4 h-4"
@@ -1224,7 +1380,7 @@
                 uploadService.isUploading() ? uploadService.cancelUpload() : uploadService.dismiss()
               "
               [title]="uploadService.isUploading() ? 'Cancel upload' : 'Dismiss'"
-              class="p-1 rounded-md text-slate-400 hover:text-white hover:bg-mauve-800 transition cursor-pointer"
+              class="p-1 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800 transition cursor-pointer"
             >
               <svg
                 class="w-4 h-4"
@@ -1247,52 +1403,52 @@
                 {{ uploadService.currentTask()?.title }}
               </p>
               <span
-                class="inline-block mt-0.5 px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                class="inline-block mt-0.5 px-2 py-0.5 rounded text-[10px] font-medium bg-zinc-800 text-zinc-300 border border-zinc-700"
               >
                 {{ uploadService.currentTask()?.category }}
               </span>
             </div>
             @if (uploadService.isUploading()) {
-              <span class="font-mono font-bold text-amber-400 text-sm shrink-0"
+              <span class="font-mono font-bold text-white text-sm shrink-0"
                 >{{ uploadService.progress() }}%</span
               >
             }
           </div>
 
           @if (uploadService.isUploading()) {
-            <!-- Animated Progress Bar -->
+            <!-- Progress Bar -->
             <div
-              class="w-full h-2.5 bg-mauve-950 rounded-full overflow-hidden p-0.5 border border-mauve-800"
+              class="w-full h-2 bg-zinc-950 rounded-full overflow-hidden border border-zinc-800"
             >
               <div
-                class="h-full bg-linear-to-r from-mauve-500 via-amber-500 to-amber-400 rounded-full transition-all duration-150 ease-out shadow-sm shadow-amber-500/40"
+                class="h-full bg-red-600 rounded-full transition-all duration-150 ease-out"
                 [style.width.%]="uploadService.progress()"
               ></div>
             </div>
 
             <!-- Transfer details & Status text -->
-            <div class="flex items-center justify-between text-[11px] text-slate-400 font-mono">
+            <div class="flex items-center justify-between text-[11px] text-zinc-400 font-mono">
               <span>
                 {{ uploadService.progressBytes()?.loaded || '0 B' }} /
                 {{ uploadService.progressBytes()?.total || '...' }}
                 @if (uploadService.uploadSpeed()) {
-                  <span class="text-amber-400/90 font-medium ml-1">({{ uploadService.uploadSpeed() }})</span>
+                  <span class="text-zinc-300 font-medium ml-1">({{ uploadService.uploadSpeed() }})</span>
                 }
               </span>
               <span>
                 @if (uploadService.eta()) {
-                  <span class="text-slate-300 text-[10px]">{{ uploadService.eta() }}</span>
+                  <span class="text-zinc-300 text-[10px]">{{ uploadService.eta() }}</span>
                 } @else {
-                  <span class="text-slate-400 text-[10px]">{{ uploadService.statusText() }}</span>
+                  <span class="text-zinc-400 text-[10px]">{{ uploadService.statusText() }}</span>
                 }
               </span>
             </div>
           } @else if (uploadService.isComplete()) {
-            <p class="text-xs text-slate-300">
+            <p class="text-xs text-zinc-300">
               Your clip has published and the feed has been refreshed!
             </p>
           } @else if (uploadService.error()) {
-            <p class="text-xs text-rose-300 leading-snug">{{ uploadService.error() }}</p>
+            <p class="text-xs text-red-300 leading-snug">{{ uploadService.error() }}</p>
           }
         </div>
       </div>
@@ -1302,10 +1458,10 @@
         type="button"
         (click)="uploadService.toggleMinimize()"
         title="Click to expand upload details"
-        class="fixed bottom-5 right-5 z-50 bg-mauve-900 border border-amber-800/60 hover:border-amber-500/50 rounded-full px-4 py-2.5 shadow-2xl flex items-center gap-3 cursor-pointer transition group backdrop-blur-md"
+        class="fixed bottom-5 right-5 z-50 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 rounded-full px-4 py-2.5 shadow-2xl flex items-center gap-3 cursor-pointer transition group backdrop-blur-md"
       >
         <div
-          class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0"
+          class="w-5 h-5 rounded-full bg-zinc-800 text-zinc-300 flex items-center justify-center shrink-0"
         >
           <svg class="animate-spin w-3 h-3" fill="none" viewBox="0 0 24 24">
             <circle
@@ -1327,7 +1483,7 @@
           <span class="font-medium text-white truncate block">{{
             uploadService.currentTask()?.title
           }}</span>
-          <span class="text-[10px] font-mono text-amber-400">
+          <span class="text-[10px] font-mono text-zinc-400">
             {{ uploadService.progress() }}% uploaded
             @if (uploadService.uploadSpeed()) {
               • {{ uploadService.uploadSpeed() }}
@@ -1335,7 +1491,7 @@
           </span>
         </div>
         <svg
-          class="w-4 h-4 text-slate-400 group-hover:text-white transition shrink-0"
+          class="w-4 h-4 text-zinc-400 group-hover:text-white transition shrink-0"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -1345,5 +1501,15 @@
         </svg>
       </button>
     }
+  }
+
+  <!-- Copied Toast Banner -->
+  @if (copiedToast()) {
+    <div class="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-zinc-900 border border-zinc-700 text-zinc-100 px-4 py-2 rounded-full font-medium text-xs shadow-2xl flex items-center gap-2 animate-bounce">
+      <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+      <span>Share link copied to clipboard!</span>
+    </div>
   }
 </div>
